@@ -112,9 +112,13 @@ simu<-ggplot(ts, aes(x=abundance, y=rel)) + geom_vline( xintercept =alq,col="red
 
 
 #######
-
+###For population frequency Info based on Kofler et al. 2015 PLOS Genetics
 info1<-read.table("/Users/filipwierzbicki/Desktop/evolution_cluster/temp/TEfamInfo_correct")
 names(info1)<-c("name","TE","order","AF","popins")
+
+###exclude somatically regulated TEs based on Malone et al. 2009 Cell
+info1<-subset(info1,name!="gypsy10"&name!="gypsy"&name!="ZAM"&name!="gtwin"&name!="gypsy5"&name!="Tabor")
+
 info<-subset(info1,select=c("TE","AF"))
 info$AF<-round(info$AF,digits = 1)
 
@@ -433,13 +437,13 @@ proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="r
 
 
 
-g<-ggarrange(simu, real,popTE2,proT,
+g<-ggarrange(simu, popTE2, real, proT,
              labels = c("A", "B","C","D"),
              ncol = 2, nrow = 2)
 plot(g)
 
-#ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.pdf",width=6,height=6)
-#ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.png",width=6,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.pdf",width=6,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.png",width=6,height=6)
 
 ```
 
