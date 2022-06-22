@@ -43,7 +43,7 @@ names(t)<-c("global","local")
 
 
 gS<-ggplot(t, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 50.1, label.y = 13.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+xlim(50,400)+ggtitle("Expecation: Simulated invasions \n under the trap model")
+  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+xlim(50,400)+ggtitle("Expected: Simulated invasions \n under the trap model")
 
 
 
