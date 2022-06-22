@@ -306,7 +306,7 @@ t$id2<-paste(t$id,t$TE,sep="_")
 cl<-subset(t,region=="cl")
 cl<-subset(cl,select=c("count","id2"))
 
-rest<-subset(t,region!="cl")
+rest<-subset(t,region!="cl") ##### currently no third region class (e.g. ref) considered
 rest<-subset(rest,select=c("count","id2"))
 for (sid in unique(rest$id2)) { 
   i <- rest$id2 == sid
@@ -382,7 +382,7 @@ t$id2<-paste(t$id,t$TE,sep="+")
 cl<-subset(t,region=="cluster")
 cl<-subset(cl,select=c("count","id2"))
 
-rest<-subset(t,region!="cluster")
+rest<-subset(t,region!="cluster") ##### currently no third region class (e.g. ref) considered
 rest<-subset(rest,select=c("count","id2"))
 
 for (sid in unique(rest$id2)) { 
