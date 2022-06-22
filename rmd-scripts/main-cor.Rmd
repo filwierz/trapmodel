@@ -275,8 +275,8 @@ gcor<-ggarrange(gS, gPop, gC, gP,
 plot(gcor)
 
 
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/correlation_main.pdf",width=6,height=6)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/correlation_main.png",width=6,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/correlation_main.pdf",width=7,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/correlation_main.png",width=7,height=6)
 ```
 
 
