@@ -25,8 +25,12 @@ library(dplyr)
 library(ggplot2)
 library(ggpubr)
 
+#######
+###For population frequency Info based on Kofler et al. 2015 PLOS Genetics
 info1<-read.table("/Users/filipwierzbicki/Desktop/evolution_cluster/temp/TEfamInfo_correct")
 names(info1)<-c("name","TE","order","AF","popins")
+###exclude somatically regulated TEs based on Malone et al. 2009 Cell
+info1<-subset(info1,name!="gypsy10"&name!="gypsy"&name!="ZAM"&name!="gtwin"&name!="gypsy5"&name!="Tabor")
 info<-subset(info1,select=c("TE","AF"))
 info$AF<-round(info$AF,digits = 1)
 
@@ -97,40 +101,6 @@ ht$indsrel<-ht$inds/sum(ht$inds)
 real<-ggplot(ht, aes(x=cluster, y=indsrel)) + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")#+ geom_vline( xintercept =alq,col="red") + geom_vline( xintercept =auq,col="red")#+xlim(-1,160)+ylim(0,0.35)
 
 
-
-##reference regions:
-t<-tq
-t$id2<-paste(t$id,t$TE,sep="+")
-
-cl<-subset(t,region=="ref")
-cl<-subset(cl,select=c("count","id2"))
-
-rest<-subset(t,region=="non-cluster")
-rest<-subset(rest,select=c("count","id2"))
-
-cr<-full_join(cl,rest,by="id2")
-names(cr)<-c("cluster","id2","noncluster")
-
-cr$id<-gsub("\\+.*","",cr$id2)
-cr$TE<-gsub(".*\\+","",cr$id2)
-
-t<-cr
-t<-left_join(t,info,by="TE")
-
-#including AF threshold
-t<-subset(t,AF!="NA")##remove missing AFs
-t<-subset(t,AF<=0.2)
-
-
-t[is.na(t)] <- 0
-
-cR<-t
-
-cR$cluster<-log10(cR$cluster+1)
-cR$noncluster<-log10(cR$noncluster+1)
-
-##cluster:
-
 t<-tq
 t$id2<-paste(t$id,t$TE,sep="+")
 
@@ -146,30 +116,45 @@ names(cr)<-c("cluster","id2","noncluster")
 cr$id<-gsub("\\+.*","",cr$id2)
 cr$TE<-gsub(".*\\+","",cr$id2)
 
-t<-cr
-t<-left_join(t,info,by="TE")
 
+t<-cr
+
+
+t[is.na(t)] <- 0
+
+
+for (sid in unique(t$TE)) { 
+  i <- t$TE == sid
+  a = mean(t$cluster[i])
+  b = mean(t$noncluster[i])
+  t$avrcl[i] = a
+  t$avrrest[i] = b
+}
+
+t<-subset(t,select = c("TE","avrcl","avrrest"))
+t<-unique(t)
+
+
+
+t<-left_join(t,info,by="TE")
 #including AF threshold
 t<-subset(t,AF!="NA")##remove missing AFs
 t<-subset(t,AF<=0.2)
 
-t[is.na(t)] <- 0
-
 cC<-t
 
-cC$cluster<-log10(cC$cluster+1)
-cC$noncluster<-log10(cC$noncluster+1)
+cC$cluster<-log10(cC$avrcl+1)
+cC$noncluster<-log10(cC$avrrest+1)
 
 
-gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+facet_wrap(~id,ncol = 5)+stat_cor(method = "pearson", label.x = 0.1, label.y = 1,size=3)+ 
+
+gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 1,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))
 
-gR<-ggplot(cR,aes(x=noncluster,y=cluster))+geom_point()+facet_wrap(~id,ncol = 5)+stat_cor(method = "pearson", label.x = 0.1, label.y = 1,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("reference insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))
 
-gFL<-ggarrange(gC, gR,real,
-                labels = c("A", "B","C"),
-                ncol = 1, nrow = 3)
+gFL<-ggarrange(gC,real,
+                labels = c("A","B"),
+                ncol = 2, nrow = 1)
 plot(gFL)
 
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/Full-length_cuscoTAS.png",width=8,height=6)
