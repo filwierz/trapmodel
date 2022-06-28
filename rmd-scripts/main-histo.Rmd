@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This scripts contains the whole pipeline for the main histogram figure of TE distribution in clusters.
 
-
+Note that simulated TE copy numbers are per diploid, while counts based populationTE2 are per haploid and assemblies represent a single chromosome (however could be chimeric).
 
 ```{bash popTE2 on vetgrid27, eval=FALSE}
 cd /Volumes/Temp3/filip/trap_model/popTE2/pipeline
