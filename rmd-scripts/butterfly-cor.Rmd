@@ -1,0 +1,341 @@
+---
+title: "standalone-cor"
+author: "Filip Wierzbicki"
+date: "7/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This script correlates stand alone insertions with TE abundance.
+
+```{bash,eval=FALSE}
+for i in *sam;do n=${i%.sam};python /Volumes/Temp3/filip/trap_model/trapmodel/helper-scripts/butterfly_finder.py --sam $i --rm /Volumes/Temp3/filip/trap_model/whole-genome/repeatmasker/${n}.fasta.out --window 1000 --minlen 100 --maxdiv 10.0 --min-mq 5 > ../output/${n}.txt;done
+```
+
+
+```{r,eval=TRUE}
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+
+th=100
+
+b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/output/Canton-S.txt")
+names(b1)<-c("TE","chr","start","end","left","right")
+
+b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/output/DGRP-732.txt")
+names(b2)<-c("TE","chr","start","end","left","right")
+
+b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/output/Iso1.txt")
+names(b3)<-c("TE","chr","start","end","left","right")
+
+b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/output/Oregon-R.txt")
+names(b4)<-c("TE","chr","start","end","left","right")
+
+b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/output/Pi2.txt")
+names(b5)<-c("TE","chr","start","end","left","right")
+
+
+a1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct/Canton-S_gapless_cusco_tas_summary.forR")
+a2<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct/DGRP-732_gapless_cusco_tas_summary.forR")
+a3<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct/Iso1_gapless_cusco_tas_summary.forR")
+a4<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct/Oregon-R_gapless_cusco_tas_summary.forR")
+a5<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct/Pi2_gapless_cusco_tas_summary.forR")
+names(a1)<-c("count","strain","TE","region")
+names(a2)<-c("count","strain","TE","region")
+names(a3)<-c("count","strain","TE","region")
+names(a4)<-c("count","strain","TE","region")
+names(a5)<-c("count","strain","TE","region")
+
+c1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct/Canton-S_cluster.bed")
+names(c1)<-c("chr","start","end","cluster","ig","ir")
+c2<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct/DGRP-732_cluster.bed")
+names(c2)<-c("chr","start","end","cluster","ig","ir")
+c3<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct/Iso1_cluster.bed")
+names(c3)<-c("chr","start","end","cluster","ig","ir")
+c4<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct/Oregon-R_cluster.bed")
+names(c4)<-c("chr","start","end","cluster","ig","ir")
+c5<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct/Pi2_cluster.bed")
+names(c5)<-c("chr","start","end","cluster","ig","ir")
+
+c1$start<-c1$start+1
+c1$end<-c1$end+1
+
+c2$start<-c2$start+1
+c2$end<-c2$end+1
+
+c3$start<-c3$start+1
+c3$end<-c3$end+1
+
+c4$start<-c4$start+1
+c4$end<-c4$end+1
+
+c5$start<-c5$start+1
+c5$end<-c5$end+1
+
+
+b1$id<-paste(b1$TE,b1$chr,b1$start,b1$end,sep = "_")
+b2$id<-paste(b2$TE,b2$chr,b2$start,b2$end,sep = "_")
+b3$id<-paste(b3$TE,b3$chr,b3$start,b3$end,sep = "_")
+b4$id<-paste(b4$TE,b4$chr,b4$start,b4$end,sep = "_")
+b5$id<-paste(b5$TE,b5$chr,b5$start,b5$end,sep = "_")
+
+########
+
+ic=b1[FALSE,]
+
+for(i in 1:nrow(b1)) {
+  row <- b1[i,]
+  if (row$left<th && row$right<th){
+    next
+  }
+  for(k in 1:nrow(c1)){
+    line <- c1[k,]
+    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
+      ic[nrow(ic) + 1,] <- row
+      break
+    }
+  
+  }
+}
+
+
+nc<-anti_join(b1,ic,by="id")
+nc<-subset(nc,nc$left>=th | nc$right>=th)
+
+for (sid in unique(nc$TE)) { 
+  i <- nc$TE == sid
+  x = nrow(subset(nc,nc$TE==sid))
+  nc$butterfly[i] = x
+}
+
+
+bfs<-subset(nc,select = c("TE","butterfly"))
+bfs<-unique(bfs)
+
+ac<-subset(a1,region=="cluster")
+ac<-subset(ac,select=c("TE","count"))
+
+t<-full_join(bfs,ac,by="TE")
+
+t1<-t
+t1$strain<-c("Canton-S")
+##########
+
+
+ic=b2[FALSE,]
+
+for(i in 1:nrow(b2)) {
+  row <- b2[i,]
+  if (row$left<th && row$right<th){
+    next
+  }
+  for(k in 1:nrow(c2)){
+    line <- c2[k,]
+    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
+      ic[nrow(ic) + 1,] <- row
+      break
+    }
+  
+  }
+}
+
+
+nc<-anti_join(b2,ic,by="id")
+nc<-subset(nc,nc$left>=th | nc$right>=th)
+
+for (sid in unique(nc$TE)) { 
+  i <- nc$TE == sid
+  x = nrow(subset(nc,nc$TE==sid))
+  nc$butterfly[i] = x
+}
+
+
+bfs<-subset(nc,select = c("TE","butterfly"))
+bfs<-unique(bfs)
+
+ac<-subset(a2,region=="cluster")
+ac<-subset(ac,select=c("TE","count"))
+
+t<-full_join(bfs,ac,by="TE")
+
+t2<-t
+t2$strain<-c("DGRP-732")
+
+##########
+
+
+ic=b3[FALSE,]
+
+for(i in 1:nrow(b3)) {
+  row <- b3[i,]
+  if (row$left<th && row$right<th){
+    next
+  }
+  for(k in 1:nrow(c3)){
+    line <- c3[k,]
+    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
+      ic[nrow(ic) + 1,] <- row
+      break
+    }
+  
+  }
+}
+
+
+nc<-anti_join(b3,ic,by="id")
+nc<-subset(nc,nc$left>=th | nc$right>=th)
+
+for (sid in unique(nc$TE)) { 
+  i <- nc$TE == sid
+  x = nrow(subset(nc,nc$TE==sid))
+  nc$butterfly[i] = x
+}
+
+
+bfs<-subset(nc,select = c("TE","butterfly"))
+bfs<-unique(bfs)
+
+ac<-subset(a3,region=="cluster")
+ac<-subset(ac,select=c("TE","count"))
+
+t<-full_join(bfs,ac,by="TE")
+
+t3<-t
+t3$strain<-c("Iso1")
+#######
+
+
+
+ic=b4[FALSE,]
+
+for(i in 1:nrow(b4)) {
+  row <- b4[i,]
+  if (row$left<th && row$right<th){
+    next
+  }
+  for(k in 1:nrow(c4)){
+    line <- c4[k,]
+    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
+      ic[nrow(ic) + 1,] <- row
+      break
+    }
+  
+  }
+}
+
+
+nc<-anti_join(b4,ic,by="id")
+nc<-subset(nc,nc$left>=th | nc$right>=th)
+
+for (sid in unique(nc$TE)) { 
+  i <- nc$TE == sid
+  x = nrow(subset(nc,nc$TE==sid))
+  nc$butterfly[i] = x
+}
+
+
+bfs<-subset(nc,select = c("TE","butterfly"))
+bfs<-unique(bfs)
+
+ac<-subset(a4,region=="cluster")
+ac<-subset(ac,select=c("TE","count"))
+
+t<-full_join(bfs,ac,by="TE")
+
+t4<-t
+t4$strain<-c("Oregon-R")
+########
+
+
+ic=b5[FALSE,]
+
+for(i in 1:nrow(b5)) {
+  row <- b5[i,]
+  if (row$left<th && row$right<th){
+    next
+  }
+  for(k in 1:nrow(c5)){
+    line <- c5[k,]
+    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
+      ic[nrow(ic) + 1,] <- row
+      break
+    }
+  
+  }
+}
+
+
+nc<-anti_join(b5,ic,by="id")
+nc<-subset(nc,nc$left>=th | nc$right>=th)
+
+for (sid in unique(nc$TE)) { 
+  i <- nc$TE == sid
+  x = nrow(subset(nc,nc$TE==sid))
+  nc$butterfly[i] = x
+}
+
+
+bfs<-subset(nc,select = c("TE","butterfly"))
+bfs<-unique(bfs)
+
+ac<-subset(a5,region=="cluster")
+ac<-subset(ac,select=c("TE","count"))
+
+t<-full_join(bfs,ac,by="TE")
+
+t5<-t
+t5$strain<-c("Pi2")
+#######
+
+#######
+###For population frequency Info based on Kofler et al. 2015 PLOS Genetics
+info1<-read.table("/Users/filipwierzbicki/Desktop/evolution_cluster/temp/TEfamInfo_correct")
+names(info1)<-c("name","TE","order","AF","popins")
+
+###exclude somatically regulated TEs based on Malone et al. 2009 Cell
+info1<-subset(info1,name!="gypsy10"&name!="gypsy"&name!="ZAM"&name!="gtwin"&name!="gypsy5"&name!="Tabor")
+
+info<-subset(info1,select=c("TE","AF"))
+info$AF<-round(info$AF,digits = 1)
+
+infoP<-subset(info1,select=c("name","AF"))
+infoP$AF<-round(infoP$AF,digits = 1)
+names(infoP)<-c("TE","AF")
+
+
+
+t<-rbind(t1,t2,t3,t4,t5)
+
+t[is.na(t)] <- 0
+
+for (sid in unique(t$TE)) { 
+  i <- t$TE == sid
+  a = mean(t$count[i])
+  b = mean(t$butterfly[i])
+  t$avrcl[i] = a
+  t$avrbut[i] = b
+}
+
+t<-subset(t,select = c("TE","avrcl","avrbut"))
+t<-unique(t)
+
+t<-left_join(t,info,by="TE")
+
+#including AF threshold
+t<-subset(t,AF!="NA")##remove missing AFs
+t<-subset(t,AF<=0.2)
+t$clusterlog<-log10(t$avrcl+1)
+t$butterflylog<-log10(t$avrbut+1)
+
+
+g<-ggplot(t,aes(x=clusterlog,y=butterflylog))+geom_point()+stat_cor(method = "pearson", label.x = 0.0, label.y = 2.0,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("cluster insertions")+ylab("butterfly insertions")+scale_x_continuous(breaks=c(0,1,2),labels=c("0","9","99"))+scale_y_continuous(breaks=c(0,1,2),labels=c("0","9","99"))
+plot(g)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/supp_butterfly-correlation.pdf",width=7,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/supp_butterfly-correlation.png",width=7,height=6)
+```
+
