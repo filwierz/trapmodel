@@ -29,6 +29,7 @@ parser.add_argument("--minlen", type=int, required=False, dest="minlen", default
 parser.add_argument("--maxdiv", type=float, required=False, dest="maxdiv", default=100.0, help="maximum divergence of repeatmasker feature")
 parser.add_argument("--min-mq", type=int, required=False, dest="minmq", default=0, help="minimum mapping quality of small RNA read")
 parser.add_argument("--window", type=int, required=False, dest="window", default=0, help="window size of butterfly signal")
+parser.add_argument("--id", type=str, required=True, dest="sampleid", default=None, help="id of the sample")
 
 
 args=parser.parse_args()
@@ -43,6 +44,8 @@ toit=collections.defaultdict((lambda:collections.defaultdict(lambda:[0])))
 for l in args.sam:
     l=l.rstrip("\n")
     a=l.split("\t")
+    if "@" in a[0]:
+        continue
     chromo=str(a[2])
     pos=int(a[3])
     mq=int(a[4])
@@ -87,7 +90,7 @@ for t,tmp in topr.items():
     for c,tmp2 in tmp.items():
         for s,tmp3 in tmp2.items():
             for e,ch in tmp3.items():
-                print("{0}\t{1}\t{2}\t{3}\t{4}\t{5}".format(t,c,s,e,ch[0],ch[1]))
+                print("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}".format(t,c,s,e,ch[0],ch[1],args.sampleid))
        
 
 
