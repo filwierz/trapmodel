@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 This script correlates stand alone insertions with TE abundance.
 
 ```{bash,eval=FALSE}
+for i in *fastq;do n=${i%.sf.fastq};novoalign -d /Volumes/Temp3/filip/trap_model/whole-genome/assemblies/${n}.nvi -f $i -F STDFQ -o SAM -o FullNW -r RANDOM > /Volumes/Temp3/filip/trap_model/butterfly/${n}.sam;done
+
 for i in *sam;do n=${i%.sam};python /Volumes/Temp3/filip/trap_model/trapmodel/helper-scripts/butterfly_finder.py --sam $i --rm /Volumes/Temp3/filip/trap_model/whole-genome/repeatmasker/${n}.fasta.out --window 1000 --minlen 100 --maxdiv 10.0 --min-mq 5 > ../output/${n}.txt;done
 ```
 
