@@ -12,9 +12,20 @@ knitr::opts_chunk$set(echo = TRUE)
 This script correlates stand alone insertions with TE abundance.
 
 ```{bash,eval=FALSE}
+cd /Volumes/Temp3/filip/trap_model/proTRAC/trimming/trimmed/sf
 for i in *fastq;do n=${i%.sf.fastq};novoalign -d /Volumes/Temp3/filip/trap_model/whole-genome/assemblies/${n}.nvi -f $i -F STDFQ -o SAM -o FullNW -r RANDOM > /Volumes/Temp3/filip/trap_model/butterfly/${n}.sam;done
 
 for i in *sam;do n=${i%.sam};python /Volumes/Temp3/filip/trap_model/trapmodel/helper-scripts/butterfly_finder.py --sam $i --rm /Volumes/Temp3/filip/trap_model/whole-genome/repeatmasker/${n}.fasta.out --window 1000 --minlen 100 --maxdiv 10.0 --min-mq 5 > ../output/${n}.txt;done
+
+#new approach with filtering:
+cd /Volumes/Temp3/filip/trap_model/proTRAC/trimming/trimmed/sf/map
+for i in *.sam; do n=${i%.sam}; cat $i|grep -v '^@'|awk '$3 !~ /_miRNA|_rRNA|_snRNA|_snoRNA|_tRNA/'|awk '{if ((22<length($10)) && (length($10)<30)) print $0}'|awk '{print "@" $1; print $10; print "+" $1; print $11}' > /Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/${n}.fastq; done
+
+for i in *fastq;do n=${i%.fastq};novoalign -d /Volumes/Temp3/filip/trap_model/whole-genome/assemblies/${n}.nvi -f $i -F STDFQ -o SAM -o FullNW -r RANDOM > map/${n}.sam;done
+
+for i in *sam;do n=${i%.sam};python /Volumes/Temp3/filip/trap_model/trapmodel/helper-scripts/butterfly_finder.py --sam $i --rm /Volumes/Temp3/filip/trap_model/whole-genome/repeatmasker/${n}.fasta.out --window 1000 --minlen 100 --maxdiv 10.0 --min-mq 5 --id ${n} > output/${n}.txt;done
+
+
 ```
 
 
@@ -25,20 +36,20 @@ library(ggpubr)
 
 th=100
 
-b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/output/Canton-S.txt")
-names(b1)<-c("TE","chr","start","end","left","right")
+b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output/Canton-S.txt")
+names(b1)<-c("TE","chr","start","end","left","right","strain")
 
-b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/output/DGRP-732.txt")
-names(b2)<-c("TE","chr","start","end","left","right")
+b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output/DGRP-732.txt")
+names(b2)<-c("TE","chr","start","end","left","right","strain")
 
-b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/output/Iso1.txt")
-names(b3)<-c("TE","chr","start","end","left","right")
+b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output/Iso1.txt")
+names(b3)<-c("TE","chr","start","end","left","right","strain")
 
-b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/output/Oregon-R.txt")
-names(b4)<-c("TE","chr","start","end","left","right")
+b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output/Oregon-R.txt")
+names(b4)<-c("TE","chr","start","end","left","right","strain")
 
-b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/output/Pi2.txt")
-names(b5)<-c("TE","chr","start","end","left","right")
+b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output/Pi2.txt")
+names(b5)<-c("TE","chr","start","end","left","right","strain")
 
 
 a1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct/Canton-S_gapless_cusco_tas_summary.forR")
