@@ -416,9 +416,9 @@ g90<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
 #############
 #combine plots:
 
-g<-ggarrange(g10,g30,g50,g70,g90,
-             labels = c("A","B","C","D","E"),
-             ncol = 1, nrow = 5)
+g<-ggarrange(g10,g30,g50,g70,
+             labels = c("A","B","C","D"),
+             ncol = 1, nrow = 4)
 
 plot(g)
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-negative-site.pdf",height = 12,width = 12)
