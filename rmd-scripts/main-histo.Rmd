@@ -196,7 +196,7 @@ ht<-unique(ht)
 ht$indsrel<-ht$inds/sum(ht$inds)
 
 
-real<-ggplot(ht, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")#+xlim(-1,160)+ylim(0,0.35)
+real<-ggplot(ht, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(0,30)#+xlim(-1,160)+ylim(0,0.35)
 
 
 ##ref
@@ -431,7 +431,7 @@ prt<-unique(prt)
 prt$indsrel<-prt$inds/sum(prt$inds)
 
 
-proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")#+xlim(-1,160)+ylim(0,0.35)
+proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(0,30)#+ylim(0,0.35)
 
 
 
@@ -442,8 +442,8 @@ g<-ggarrange(simu, popTE2, real, proT,
              ncol = 2, nrow = 2)
 plot(g)
 
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.pdf",width=6,height=6)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.png",width=6,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main-xlim.pdf",width=6,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main-xlim.png",width=6,height=6)
 
 ```
 
