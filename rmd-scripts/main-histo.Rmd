@@ -31,6 +31,9 @@ java -jar /Volumes/Temp3/filip/programs/popte2-v1.10.04.jar pairupSignatures --s
 python ../../../scripts/popTE2-cluster_VS_rest.py --popte2 sep_teinsertions --pic resources/rel5_brenecluster.gff --minfreq 0.3 > sep.mf30_brenecluster
 
 cat sep.mf30_brenecluster|awk '{print $1"_"$5"_"$10}'|sort|uniq -c|awk -F "_" '{print $1,$2,$3}' > sep.mf30_brenecluster.forR
+#haploid:
+cat sep.mf30_brenecluster|awk '$9>=0.6'|awk '{print $1"_"$5"_"$10}'|sort|uniq -c|awk -F "_" '{print $1,$2,$3}'|awk '{print $1,$2,$3,$4,$2"_"$3"_"$4}' > haploid_counts/sep.mf30_brenecluster-fixed
+cat sep.mf30_brenecluster|awk '$9<0.6'|awk '{print $1"_"$5"_"$10}'|sort|uniq -c|awk -F "_" '{print $1,$2,$3}'|awk '{print $1/2,$2,$3,$4,$2"_"$3"_"$4}' > haploid_counts/sep.mf30_brenecluster-seg
 ```
 
 
@@ -69,6 +72,7 @@ library(ggpubr)
 t<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/constant-u/run3-seed/combined/tally-constant_u")
 
 names(t)<-c("replicate","generation","type","abundance","number")
+t$abundance<-t$abundance/2 #for halpoid abundance
 
 t<-subset(t,generation==2000)
 t<-subset(t,type=="cluster")
@@ -298,8 +302,21 @@ whole<-ggplot(tqu, aes(x=insertions, y=indsrel)) + geom_bar(stat="identity")+yla
 
 ###popTE2:
 
-t<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/popTE2/sep.mf30_brenecluster.forR")
+#t<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/popTE2/sep.mf30_brenecluster.forR")
+#names(t)<-c("count","id","TE","region")
+tseg<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/popTE2/haploid_counts/sep.mf30_brenecluster-seg")
+tfix<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/popTE2/haploid_counts/sep.mf30_brenecluster-fixed")
+t<-rbind(tseg,tfix)
+names(t)<-c("count","id","TE","region","id2")
+for (sid in unique(t$id2)) { 
+  i <- t$id2 == sid
+  a = sum(t$count[i])
+  t$sum[i] = a
+}
+t<-subset(t,select=c("sum","id","TE","region"))
+t<-unique(t)
 names(t)<-c("count","id","TE","region")
+t$count<-round(t$count+0.00000001)
 
 t$id2<-paste(t$id,t$TE,sep="_")
 
@@ -442,8 +459,8 @@ g<-ggarrange(simu, popTE2, real, proT,
              ncol = 2, nrow = 2)
 plot(g)
 
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main-xlim.pdf",width=6,height=6)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main-xlim.png",width=6,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main-xlim-haploid.pdf",width=6,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main-xlim-haploid.png",width=6,height=6)
 
 ```
 
