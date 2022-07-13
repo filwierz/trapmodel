@@ -112,7 +112,7 @@ for (row in 1:nrow(tso)) {
   }
 }
 
-simu<-ggplot(ts, aes(x=abundance, y=rel)) + geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("cluster insertions")#+xlim(-1,160)+ylim(0,0.35)
+simu<-ggplot(ts, aes(x=abundance, y=rel)) + geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("cluster insertions")+ggtitle("Expected: Simulated invasions \n under the trap model")#+xlim(-1,160)+ylim(0,0.35)
 
 
 #######
@@ -200,7 +200,7 @@ ht<-unique(ht)
 ht$indsrel<-ht$inds/sum(ht$inds)
 
 
-real<-ggplot(ht, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(0,30)#+xlim(-1,160)+ylim(0,0.35)
+real<-ggplot(ht, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(0,30)+ggtitle("Observed: known clusters \n in long-read assemblies ")#+xlim(-1,160)+ylim(0,0.35)
 
 
 ##ref
@@ -377,7 +377,7 @@ pt<-unique(pt)
 pt$indsrel<-pt$inds/sum(pt$inds)
 
 
-popTE2<-ggplot(pt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")#+xlim(-1,160)+ylim(0,0.35)
+popTE2<-ggplot(pt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+ggtitle("Observed: Short-read based TE calls \n in known clusters")#+xlim(-1,160)+ylim(0,0.35)
 
 
 
@@ -448,7 +448,7 @@ prt<-unique(prt)
 prt$indsrel<-prt$inds/sum(prt$inds)
 
 
-proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(0,30)#+ylim(0,0.35)
+proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(0,30)+ggtitle("Observed: denovo-called clusters \n in long-read assemblies ")#+ylim(0,0.35)
 
 
 
@@ -459,8 +459,8 @@ g<-ggarrange(simu, popTE2, real, proT,
              ncol = 2, nrow = 2)
 plot(g)
 
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main-xlim-haploid.pdf",width=6,height=6)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main-xlim-haploid.png",width=6,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main-xlim-haploid.pdf",width=7.5,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main-xlim-haploid.png",width=7.5,height=6)
 
 ```
 
