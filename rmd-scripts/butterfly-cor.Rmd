@@ -460,14 +460,16 @@ t5a<-subset(t5a,AF<=0.2)
 
 
 ta<-rbind(t1a,t2a,t3a,t4a,t5a)
-ta0<-subset(ta,butterfly==0)
+ta0<-subset(ta,count==0)
 
+hier<-read.table("/Users/filipwierzbicki/Desktop/trap_model/data/other/new_dmel_132cons_hier",header =TRUE)
+hier<-subset(hier,select=c("id","family"))
+names(hier)<-c("TE","family")
+ta0<-left_join(ta0,hier,by="TE")
+ta0<-subset(ta0,select=c("family","sum","butterfly","count","strain.x"))
+names(ta0)<-c("family","non-cluster","other-SL","cluster","strain")
 
-
-
-
-
-
+write.table(ta0,"/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/output/missing-clusterinsertions.txt",quote=FALSE)
 
 ```
 
