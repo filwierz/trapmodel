@@ -112,6 +112,17 @@ for i in *.bed;do n=${i%.bed};g=${n%_*};python /Users/filipwierzbicki/Desktop/tr
 
 
 
+```{bash with gapped cusco, eval=FALSE}
+cd /Users/filipwierzbicki/Desktop/trap_model/analysis/cluster/cusco/bwasw/cluster_bed
+
+mkdir distinct
+for i in *bed;do n=${i};cat $i|sort -k1,1 -k2,2n|bedtools merge -i - -o distinct -c 4,5,6 > distinct/${n};done
+
+cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/TAS_cluster_bed
+
+for i in *_cluster.bed;do n=${i%_cluster.bed};cat $i /Users/filipwierzbicki/Desktop/trap_model/analysis/cluster/cusco/bwasw/cluster_bed/distinct/$i|sort -k1,1 -k2,2n|bedtools merge -i - -o distinct -c 4,5,6 > ../gapped_combined-distinct/$i;done
+
+```
 
 
 
