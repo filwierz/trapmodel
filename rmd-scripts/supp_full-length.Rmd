@@ -107,8 +107,16 @@ t$id2<-paste(t$id,t$TE,sep="+")
 cl<-subset(t,region=="cluster")
 cl<-subset(cl,select=c("count","id2"))
 
-rest<-subset(t,region=="non-cluster")
+rest<-subset(t,region!="cluster")
 rest<-subset(rest,select=c("count","id2"))
+for (sid in unique(rest$id2)) { 
+  i <- rest$id2 == sid
+  a = sum(rest$count[i])
+  rest$sum[i] = a
+}
+rest<-subset(rest,select=c("sum","id2"))
+names(rest)<-c("count","id2")
+rest<-unique(rest)
 
 cr<-full_join(cl,rest,by="id2")
 names(cr)<-c("cluster","id2","noncluster")
