@@ -153,6 +153,15 @@ cl<-subset(cl,select=c("count","id2"))
 rest<-subset(t,region!="cluster") #merges non-cluster and ref regions
 rest<-subset(rest,select=c("count","id2"))
 
+for (sid in unique(rest$id2)) { 
+  i <- rest$id2 == sid
+  a = sum(rest$count[i])
+  rest$sum[i] = a
+}
+rest<-subset(rest,select=c("sum","id2"))
+names(rest)<-c("count","id2")
+rest<-unique(rest)
+
 cr<-full_join(cl,rest,by="id2")
 names(cr)<-c("cluster","id2","noncluster")
 
@@ -193,7 +202,6 @@ gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "pears
   geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+ggtitle("Observed: known clusters \n in long-read assemblies ")
 
 
-###proTRAC data to be continued and adjusted for the correlation plot:
 
 ###proTRAC_p0.05 only 
 
