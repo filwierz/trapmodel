@@ -95,7 +95,7 @@ for t,tmp in topr.items():
     for c,tmp2 in tmp.items():
         for s,tmp3 in tmp2.items():
             for e,ch in tmp3.items():
-                print("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}".format(t,c,s,e,ch[0],ch[1],ch[2],ch[3],args.sampleid))
+                print("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}".format(t,c,s,e,ch[0],ch[1],ch[2],ch[3],args.sampleid))
        
 
 
