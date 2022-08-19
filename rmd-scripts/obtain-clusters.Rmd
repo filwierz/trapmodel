@@ -125,4 +125,9 @@ for i in *_cluster.bed;do n=${i%_cluster.bed};cat $i /Users/filipwierzbicki/Desk
 ```
 
 
+```{bash with gapped cusco and gapped proTRAC, eval=FALSE}
+cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct
 
+for i in *_cluster.bed;do n=${i%_cluster.bed};cat $i /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/${n}_p0.05_cluster.bed|sort -k1,1 -k2,2n|bedtools merge -i - -o distinct -c 4,5,6 > /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas_protrac/gapped_combined-distinct/$i;done
+
+```
