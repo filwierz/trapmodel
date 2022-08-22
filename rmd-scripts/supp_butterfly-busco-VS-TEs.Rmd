@@ -9,6 +9,8 @@ output: rmarkdown::github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ## Obtaining the butterfly signatures for genes/TEs in bash
+
+Considering only annotations of at least 100bp length and a maximum divergence of 10% from the TE consensus sequence, the scripts count putative piRNA reads (23-29nt) from a prefiltered  reads (for details see butterfly-cor.Rmd) mapping to the corresponding genome assembly. Unique piRNAs (min. mapping quality of 5) were counted in the neighboring 500bp window.
 ```{bash,eval=FALSE}
 nohup sh -c 'for i in *sam;do n=${i%.sam};python /Volumes/Temp3/filip/trap_model/trapmodel/helper-scripts/butterfly_finder-genes.py --sam $i --bed /Volumes/Temp3/filip/trap_model/clusterscore/busco_bed/${n}_busco.bed --window 500 --minlen 100 --min-mq 5 --id ${n} > other-parameter/busco/${n}_w500.txt;done' &
 
@@ -20,7 +22,7 @@ library(dplyr)
 library(ggplot2)
 library(ggpubr)
 
-#busco genes:
+# butterfly signatures busco genes:
 b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/busco/Canton-S_w500.txt")
 names(b1)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/busco/DGRP-732_w500.txt")
@@ -89,8 +91,8 @@ for(i in 1:nrow(b5)) {
 
 busco5<-ic
 
+#summary that needs to be kept:
 busco<-rbind(busco1,busco2,busco3,busco4,busco5)
-
 
 for (sid in unique(busco$strain)) { 
   i <- busco$strain == sid
@@ -102,8 +104,9 @@ buscosum<-unique(buscosum)
 
 buscosum$type<-c("busco")
 
-######################### TEs
+#########################TEs
 
+#butterfly signatures:
 b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Canton-S_w500.txt")
 names(b1)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/DGRP-732_w500.txt")
@@ -115,6 +118,7 @@ names(b4)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Pi2_w500.txt")
 names(b5)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 
+#cluster annotations to exclude from butterfly signatures:
 c1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/Canton-S_cluster.bed")
 names(c1)<-c("chr","start","end","cluster","ig","ir")
 c2<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/DGRP-732_cluster.bed")
@@ -148,7 +152,7 @@ b3$id<-paste(b3$TE,b3$chr,b3$start,b3$end,sep = "_")
 b4$id<-paste(b4$TE,b4$chr,b4$start,b4$end,sep = "_")
 b5$id<-paste(b5$TE,b5$chr,b5$start,b5$end,sep = "_")
 ###
-
+#excluding signatures from clusters: 
 ic=b1[FALSE,]
 
 for(i in 1:nrow(b1)) {
@@ -292,7 +296,7 @@ for(i in 1:nrow(nc)) {
 }
 
 TE5<-ic
-
+#summary that needs to be kept:
 TE<-rbind(TE1,TE2,TE3,TE4,TE5)
 
 for (sid in unique(TE$strain)) { 
