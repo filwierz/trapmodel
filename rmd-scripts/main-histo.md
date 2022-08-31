@@ -43,13 +43,13 @@ cat tally* > combined/tally-constant_u
 ```
 
 ``` bash
-cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct
-for i in *_cluster.bed;do n=${i%_cluster.bed};mkdir ${n};python /Users/filipwierzbicki/Desktop/trap_model/scripts/assembly_TE-abundance_3types.py --clu $i --ref ../ref_recover/ref_bed/${n}_ref.bed --rm /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/whole-genome/repeatmasker/${n}.fasta.out --output ${n}/ --sample ${n} --approach gapless_cusco_tas --minlen 100 --maxdiv 10.0 ;done
+cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct
+for i in *_cluster.bed;do n=${i%_cluster.bed};mkdir ${n};python /Users/filipwierzbicki/Desktop/trap_model/github/trapmodel/helper-scripts/assembly_TE-abundance_3types.py --clu $i --ref ../ref_recover/ref_bed/${n}_ref.bed --rm /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/whole-genome/repeatmasker/${n}.fasta.out --output ${n}/ --sample ${n} --approach gapped_cusco_tas --minlen 100 --maxdiv 10.0 ;done
 ```
 
 ``` bash
-cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapless_cluster_bed
-for i in *_p0.05_cluster.bed;do n=${i%_p0.05_cluster.bed};mkdir ${n};python /Users/filipwierzbicki/Desktop/trap_model/scripts/assembly_TE-abundance_3types.py --clu $i --rm /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/whole-genome/repeatmasker/${n}.fasta.out --output ${n}/ --sample ${n}_p0.05 --approach gapless_protrac --minlen 100 --maxdiv 10.0 ;done
+cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed
+for i in *_p0.05_cluster.bed;do n=${i%_p0.05_cluster.bed};mkdir ${n};python /Users/filipwierzbicki/Desktop/trap_model/github/trapmodel/helper-scripts/assembly_TE-abundance_3types.py --clu $i --rm /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/whole-genome/repeatmasker/${n}.fasta.out --output ${n}/ --sample ${n}_p0.05 --approach gapped_protrac --minlen 100 --maxdiv 10.0 ;done
 ```
 
 ``` r
