@@ -1,22 +1,28 @@
----
-title: "correlation_main"
-author: "Filip Wierzbicki"
-date: "6/22/2022"
-output: rmarkdown::github_document
----
+correlation\_main
+================
+Filip Wierzbicki
+6/22/2022
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+This scripts contains the pipeline for the main correlation figure of
+cluster and non-cluster insertions. Please, see main-histo.Rmd for
+preprocessing of required input files.
+
+``` r
+library(dplyr)
 ```
 
+    ## 
+    ## Attaching package: 'dplyr'
 
-This scripts contains the pipeline for the main correlation figure of cluster and non-cluster insertions.
-Please, see main-histo.Rmd for preprocessing of required input files.
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
 
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
 
-
-```{R,eval=TRUE}
-library(dplyr)
+``` r
 library(ggplot2)
 library(ggpubr)
 ####
@@ -26,10 +32,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-                 "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-                 "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-                 "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-                 "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+                 "fwt", "w",    "tes",  "popfreq",  "fixed","delim2",
+                 "fwcli",   "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+                 "fwrefi",  "refins",   "refins_popfreq", "refins_fixed","delim4",
+                 "novel",   "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -281,11 +287,11 @@ gcor<-ggarrange(gS, gPop, gC, gP,
                 ncol = 2, nrow = 2)
 
 plot(gcor)
+```
 
+![](main-cor_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
+``` r
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/correlation_main.pdf",width=7,height=6)
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/correlation_main.png",width=7,height=6)
 ```
-
-
-

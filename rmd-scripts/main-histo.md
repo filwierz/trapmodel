@@ -1,19 +1,16 @@
----
-title: "main_histo"
-author: "Filip Wierzbicki"
-date: "3/1/2022"
-output: rmarkdown::github_document
----
+main\_histo
+================
+Filip Wierzbicki
+3/1/2022
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+This scripts contains the whole pipeline for the main histogram figure
+of TE distribution in clusters.
 
-This scripts contains the whole pipeline for the main histogram figure of TE distribution in clusters.
+Note that simulated TE copy numbers are per diploid, while counts based
+populationTE2 are per haploid and assemblies represent a single
+chromosome (however could be chimeric).
 
-Note that simulated TE copy numbers are per diploid, while counts based populationTE2 are per haploid and assemblies represent a single chromosome (however could be chimeric).
-
-```{bash popTE2 on vetgrid27, eval=FALSE}
+``` bash
 cd /Volumes/Temp3/filip/trap_model/popTE2/pipeline
 
 java -Xmx16g -jar /Volumes/Temp3/filip/programs/popte2-v1.10.04.jar ppileup --bam Canton-S.sort.bam --bam DGRP-732.sort.bam --bam Iso1.sort.bam --bam Oregon-R.sort.bam --bam Pi2.sort.bam --map-qual 15 --hier /Volumes/Temp3/filip/cluster20/popte2/release5/rel5/ref/new_dmel_132cons_hier --output ../pipeline/ppileup.gz
@@ -36,36 +33,41 @@ cat sep.mf30_brenecluster|awk '$9>=0.6'|awk '{print $1"_"$5"_"$10}'|sort|uniq -c
 cat sep.mf30_brenecluster|awk '$9<0.6'|awk '{print $1"_"$5"_"$10}'|sort|uniq -c|awk -F "_" '{print $1,$2,$3}'|awk '{print $1/2,$2,$3,$4,$2"_"$3"_"$4}' > haploid_counts/sep.mf30_brenecluster-seg
 ```
 
-
-
-
-```{bash simulations on vetlinux05,eval=FALSE}
+``` bash
 cd /home/vetlinux05/Filip/trap_model/simulations/storm2/constant-u/run3-seed
 nohup sh -c 'python ../../../scripts/simstorm-constant-u-seed.py --number 300 --threads 60 --output output-constant_u- --invade ../../../invade-v0808.jar --silent' &
 #move the folder 'run3-seed' to local machine
 cd run3-seed
 mkdir combined 
 cat tally* > combined/tally-constant_u
-
 ```
 
-
-
-```{bash cuso+TAS clusters,eval=FALSE}
+``` bash
 cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/combined-distinct
 for i in *_cluster.bed;do n=${i%_cluster.bed};mkdir ${n};python /Users/filipwierzbicki/Desktop/trap_model/scripts/assembly_TE-abundance_3types.py --clu $i --ref ../ref_recover/ref_bed/${n}_ref.bed --rm /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/whole-genome/repeatmasker/${n}.fasta.out --output ${n}/ --sample ${n} --approach gapless_cusco_tas --minlen 100 --maxdiv 10.0 ;done
 ```
 
-
-```{bash protrac clusters,eval=FALSE}
+``` bash
 cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapless_cluster_bed
 for i in *_p0.05_cluster.bed;do n=${i%_p0.05_cluster.bed};mkdir ${n};python /Users/filipwierzbicki/Desktop/trap_model/scripts/assembly_TE-abundance_3types.py --clu $i --rm /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/whole-genome/repeatmasker/${n}.fasta.out --output ${n}/ --sample ${n}_p0.05 --approach gapless_protrac --minlen 100 --maxdiv 10.0 ;done
-
 ```
 
-
-```{R,eval=TRUE}
+``` r
 library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 library(ggplot2)
 library(ggpubr)
 
@@ -452,10 +454,23 @@ proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="r
 g<-ggarrange(simu, popTE2, real, proT,
              labels = c("A", "B","C","D"),
              ncol = 2, nrow = 2)
-plot(g)
-
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.pdf",width=7.5,height=6)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.png",width=7.5,height=6)
-
 ```
 
+    ## Warning: Removed 63 rows containing missing values (position_stack).
+
+    ## Warning: Removed 2 rows containing missing values (geom_bar).
+
+    ## Warning: Removed 45 rows containing missing values (position_stack).
+
+    ## Warning: Removed 2 rows containing missing values (geom_bar).
+
+``` r
+plot(g)
+```
+
+![](main-histo_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+``` r
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.pdf",width=7.5,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.png",width=7.5,height=6)
+```
