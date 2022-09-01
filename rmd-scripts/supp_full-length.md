@@ -1,27 +1,35 @@
----
-title: "supp_full-length"
-author: "Filip Wierzbicki"
-date: "4/7/2022"
-output: rmarkdown::github_document
----
-  
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+supp\_full-length
+================
+Filip Wierzbicki
+4/7/2022
 
-This scripts obtains and plots for (nearly) full-length elements correlation between clusters or reference regions and rest, and distribution of cluster insertions.
-The aim is to test if fragmented repeatmasker annotations could be qualitatively responsible for the observed patterns.
+This scripts obtains and plots for (nearly) full-length elements
+correlation between clusters or reference regions and rest, and
+distribution of cluster insertions. The aim is to test if fragmented
+repeatmasker annotations could be qualitatively responsible for the
+observed patterns.
 
-
-
-```{bash full-length counts, eval=FALSE}
+``` bash
 cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/full-length/gapped_combined-distinct
 for i in *_cluster.bed;do n=${i%_cluster.bed};mkdir ${n};python /Users/filipwierzbicki/Desktop/trap_model/github/trapmodel/helper-scripts/assembly_TE-abundance_3types-full_length.py --clu $i --ref ../../ref_recover/ref_bed/${n}_ref.bed --rm /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/whole-genome/repeatmasker/${n}.fasta.out --output ${n}/ --sample ${n} --approach FL-gapped_cusco_tas --minlen 100 --maxdiv 10.0 ;done
 ```
 
-```{R,eval=TRUE}
-
+``` r
 library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 library(ggplot2)
 library(ggpubr)
 
@@ -164,8 +172,11 @@ gFL<-ggarrange(gC,real,
                 labels = c("A","B"),
                 ncol = 2, nrow = 1)
 plot(gFL)
+```
 
+![](supp_full-length_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+``` r
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/Full-length_cuscoTAS.png",width=8,height=6)
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/Full-length_cuscoTAS.pdf",width=8,height=6)
-
 ```
