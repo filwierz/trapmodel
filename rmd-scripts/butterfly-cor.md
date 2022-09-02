@@ -1,17 +1,12 @@
----
-title: "Butterflies"
-author: "Filip Wierzbicki"
-date: "7/4/2022"
-output: rmarkdown::github_document
----
+Butterflies
+================
+Filip Wierzbicki
+7/4/2022
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+This script correlates abundance of stand-alone source loci
+(butterflies) with TE abundance in clusters.
 
-This script correlates abundance of stand-alone source loci (butterflies) with TE abundance in clusters.
-
-```{bash,eval=FALSE}
+``` bash
 #prefiltering:
 cd /Volumes/Temp3/filip/trap_model/proTRAC/trimming/trimmed/sf/map
 for i in *.sam; do n=${i%.sam}; cat $i|grep -v '^@'|awk '$3 !~ /_miRNA|_rRNA|_snRNA|_snoRNA|_tRNA/'|awk '{if ((22<length($10)) && (length($10)<30)) print $0}'|awk '{print "@" $1; print $10; print "+" $1; print $11}' > /Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/${n}.fastq; done
@@ -21,9 +16,22 @@ for i in *fastq;do n=${i%.fastq};novoalign -d /Volumes/Temp3/filip/trap_model/wh
 nohup sh -c 'for i in *sam;do n=${i%.sam};python /Volumes/Temp3/filip/trap_model/trapmodel/helper-scripts/butterfly_finder-V2.py --sam $i --rm /Volumes/Temp3/filip/trap_model/whole-genome/repeatmasker/${n}.fasta.out --window 500 --minlen 100 --maxdiv 10.0 --min-mq 5 --id ${n} > other-parameter/TE/${n}_w500.txt;done' &
 ```
 
-
-```{r,eval=TRUE}
+``` r
 library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 library(ggplot2)
 library(ggpubr)
 
@@ -310,7 +318,12 @@ names(infoP)<-c("TE","AF")
 t<-rbind(TE1,TE2,TE3,TE4,TE5)
 
 t[is.na(t)] <- 0
+```
 
+    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
+    ## generated
+
+``` r
 for (sid in unique(t$TE)) { 
   i <- t$TE == sid
   a = mean(t$count[i])
@@ -349,6 +362,15 @@ a1r<-unique(a1r)
 
 t1a<-full_join(a1r,TE1,by="TE")
 t1a[is.na(t1a)] <- 0
+```
+
+    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
+    ## generated
+    
+    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
+    ## generated
+
+``` r
 t1a<-left_join(t1a,info,by="TE")
 
 #including AF threshold
@@ -370,6 +392,12 @@ a2r<-unique(a2r)
 
 t2a<-full_join(a2r,TE2,by="TE")
 t2a[is.na(t2a)] <- 0
+```
+
+    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
+    ## generated
+
+``` r
 t2a<-left_join(t2a,info,by="TE")
 
 #including AF threshold
@@ -392,6 +420,12 @@ a3r<-unique(a3r)
 
 t3a<-full_join(a3r,TE3,by="TE")
 t3a[is.na(t3a)] <- 0
+```
+
+    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
+    ## generated
+
+``` r
 t3a<-left_join(t3a,info,by="TE")
 
 #including AF threshold
@@ -414,6 +448,15 @@ a4r<-unique(a4r)
 
 t4a<-full_join(a4r,TE4,by="TE")
 t4a[is.na(t4a)] <- 0
+```
+
+    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
+    ## generated
+    
+    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
+    ## generated
+
+``` r
 t4a<-left_join(t4a,info,by="TE")
 
 #including AF threshold
@@ -435,6 +478,15 @@ a5r<-unique(a5r)
 
 t5a<-full_join(a5r,TE5,by="TE")
 t5a[is.na(t5a)] <- 0
+```
+
+    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
+    ## generated
+    
+    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
+    ## generated
+
+``` r
 t5a<-left_join(t5a,info,by="TE")
 
 #including AF threshold
@@ -796,6 +848,11 @@ b5$strain<-c("Pi2")
 b5<-subset(b5, select = -c(V16))
 b<-rbind(b1,b2,b3,b4,b5)
 b$div<-as.numeric(as.character(b$V2))
+```
+
+    ## Warning: NAs introduced by coercion
+
+``` r
 b<-subset(b,div<=10.0)
 b$start<-as.numeric(as.character(b$V6))
 b$end<-as.numeric(as.character(b$V7))
@@ -828,13 +885,17 @@ gbt<-ggplot(frac,aes(x=strain,y=rel,alpha=type))+geom_bar(stat="identity",positi
 g<-ggarrange(gbt, gcor,
                 labels = c("A", "B"),
                 ncol = 1, nrow = 2)
-
-plot(g)
-
-
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly_main.pdf",width=7,height=6)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly_main.png",width=7,height=6)
-
-
 ```
 
+    ## Warning: Using alpha for a discrete variable is not advised.
+
+``` r
+plot(g)
+```
+
+![](butterfly-cor_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+``` r
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly_main.pdf",width=7,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly_main.png",width=7,height=6)
+```
