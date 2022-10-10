@@ -46,10 +46,12 @@ ts$tesc<-ts$tes-ts$cluins
 t<-subset(ts,select = c("tesc","cluins"))
 names(t)<-c("global","local")
 
+t$global<-t$global/2 #for halpoid abundance
+t$local<-t$local/2 #for halpoid abundance
 
 
-gS<-ggplot(t, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 50.1, label.y = 13.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+xlim(50,400)+ggtitle("Expected: Simulated invasions \n under the trap model")
+gS<-ggplot(t, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 50.1, label.y = 6.5,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+xlim(50,200)+ggtitle("Expected: Simulated invasions \n under the trap model")
 
 
 
@@ -74,8 +76,22 @@ names(infoP)<-c("TE","AF")
 
 ###popTE2:
 
-t<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/popTE2/sep.mf30_brenecluster.forR")
+#t<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/popTE2/sep.mf30_brenecluster.forR")
+#names(t)<-c("count","id","TE","region")
+
+tseg<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/popTE2/haploid_counts/sep.mf30_brenecluster-seg")
+tfix<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/popTE2/haploid_counts/sep.mf30_brenecluster-fixed")
+t<-rbind(tseg,tfix)
+names(t)<-c("count","id","TE","region","id2")
+for (sid in unique(t$id2)) { 
+  i <- t$id2 == sid
+  a = sum(t$count[i])
+  t$sum[i] = a
+}
+t<-subset(t,select=c("sum","id","TE","region"))
+t<-unique(t)
 names(t)<-c("count","id","TE","region")
+t$count<-round(t$count+0.00000001)
 
 t$id2<-paste(t$id,t$TE,sep="_")
 
@@ -128,7 +144,7 @@ cC$cluster<-log10(cC$avrcl+1)
 cC$noncluster<-log10(cC$avrrest+1)
 
 
-gPop<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 1.5,size=3)+ 
+gPop<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 1.42,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+ggtitle("Observed: Short-read based TE calls \n in known clusters")
 
 
@@ -285,7 +301,15 @@ gP<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "pears
 gcor<-ggarrange(gS, gPop, gC, gP,
                 labels = c("A", "B", "C","D"),
                 ncol = 2, nrow = 2)
+```
 
+    ## Warning: Removed 10 rows containing non-finite values (stat_cor).
+
+    ## Warning: Removed 10 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 10 rows containing missing values (geom_point).
+
+``` r
 plot(gcor)
 ```
 
