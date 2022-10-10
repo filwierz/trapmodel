@@ -197,7 +197,7 @@ ht<-unique(ht)
 ht$indsrel<-ht$inds/sum(ht$inds)
 
 
-real<-ggplot(ht, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(0,30)+ggtitle("Observed: known clusters \n in long-read assemblies ")#+xlim(-1,160)+ylim(0,0.35)
+real<-ggplot(ht, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(-1,31)+ggtitle("Observed: known clusters \n in long-read assemblies ")#+xlim(-1,160)+ylim(0,0.35)
 
 
 ##ref (not used currently)
@@ -445,7 +445,7 @@ prt<-unique(prt)
 prt$indsrel<-prt$inds/sum(prt$inds)
 
 
-proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(0,30)+ggtitle("Observed: denovo-called clusters \n in long-read assemblies ")#+ylim(0,0.35)
+proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(-1,31)+ggtitle("Observed: denovo-called clusters \n in long-read assemblies ")#+ylim(0,0.35)
 
 
 
@@ -456,13 +456,13 @@ g<-ggarrange(simu, popTE2, real, proT,
              ncol = 2, nrow = 2)
 ```
 
-    ## Warning: Removed 63 rows containing missing values (position_stack).
+    ## Warning: Removed 62 rows containing missing values (position_stack).
 
-    ## Warning: Removed 2 rows containing missing values (geom_bar).
+    ## Warning: Removed 1 rows containing missing values (geom_bar).
 
-    ## Warning: Removed 45 rows containing missing values (position_stack).
+    ## Warning: Removed 44 rows containing missing values (position_stack).
 
-    ## Warning: Removed 2 rows containing missing values (geom_bar).
+    ## Warning: Removed 1 rows containing missing values (geom_bar).
 
 ``` r
 plot(g)
