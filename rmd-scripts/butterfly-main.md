@@ -1,10 +1,12 @@
 Butterflies
 ================
 Filip Wierzbicki
-7/4/2022
+10/11/2022
 
-This script correlates abundance of stand-alone source loci
-(butterflies) with TE abundance in clusters.
+This script makes the basis of the main butterfly figure. It visualizes
+how butterflies (non-cluster source loci) compensate missing piRNA
+cluster insertions. Furthermore, it compares the abundance of butterfly
+signatures at TEs and BUSCOs.
 
 ``` bash
 #prefiltering:
@@ -105,7 +107,7 @@ ic=b1[FALSE,]
 
 for(i in 1:nrow(b1)) {
   row <- b1[i,]
-
+  
   for(k in 1:nrow(c1)){
     line <- c1[k,]
     if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
@@ -138,6 +140,20 @@ bfs<-unique(bfs)
 ac<-subset(a1,region=="cluster")
 ac<-subset(ac,select=c("TE","count"))
 TE1<-full_join(bfs,ac,by="TE")
+anc<-subset(a1,region!="cluster")
+anc<-subset(anc,select=c("TE","count"))
+
+for (sid in unique(anc$TE)) { 
+  i <- anc$TE == sid
+  a = sum(anc$count[i])
+  anc$sum[i] = a
+}
+anc<-subset(anc,select=c("TE","sum"))
+anc<-unique(anc)
+
+names(anc)<-c("TE","rest")
+TE1<-full_join(TE1,anc,by="TE")
+TE1$strain<-c("Canton-S")
 
 #
 
@@ -177,6 +193,20 @@ bfs<-unique(bfs)
 ac<-subset(a2,region=="cluster")
 ac<-subset(ac,select=c("TE","count"))
 TE2<-full_join(bfs,ac,by="TE")
+anc<-subset(a2,region!="cluster")
+anc<-subset(anc,select=c("TE","count"))
+
+for (sid in unique(anc$TE)) { 
+  i <- anc$TE == sid
+  a = sum(anc$count[i])
+  anc$sum[i] = a
+}
+anc<-subset(anc,select=c("TE","sum"))
+anc<-unique(anc)
+
+names(anc)<-c("TE","rest")
+TE2<-full_join(TE2,anc,by="TE")
+TE2$strain<-c("DGRP-732")
 
 #
 
@@ -216,6 +246,20 @@ bfs<-unique(bfs)
 ac<-subset(a3,region=="cluster")
 ac<-subset(ac,select=c("TE","count"))
 TE3<-full_join(bfs,ac,by="TE")
+anc<-subset(a3,region!="cluster")
+anc<-subset(anc,select=c("TE","count"))
+
+for (sid in unique(anc$TE)) { 
+  i <- anc$TE == sid
+  a = sum(anc$count[i])
+  anc$sum[i] = a
+}
+anc<-subset(anc,select=c("TE","sum"))
+anc<-unique(anc)
+
+names(anc)<-c("TE","rest")
+TE3<-full_join(TE3,anc,by="TE")
+TE3$strain<-c("Iso1")
 
 #
 
@@ -255,6 +299,20 @@ bfs<-unique(bfs)
 ac<-subset(a4,region=="cluster")
 ac<-subset(ac,select=c("TE","count"))
 TE4<-full_join(bfs,ac,by="TE")
+anc<-subset(a4,region!="cluster")
+anc<-subset(anc,select=c("TE","count"))
+
+for (sid in unique(anc$TE)) { 
+  i <- anc$TE == sid
+  a = sum(anc$count[i])
+  anc$sum[i] = a
+}
+anc<-subset(anc,select=c("TE","sum"))
+anc<-unique(anc)
+
+names(anc)<-c("TE","rest")
+TE4<-full_join(TE4,anc,by="TE")
+TE4$strain<-c("Oregon-R")
 
 #
 
@@ -294,6 +352,20 @@ bfs<-unique(bfs)
 ac<-subset(a5,region=="cluster")
 ac<-subset(ac,select=c("TE","count"))
 TE5<-full_join(bfs,ac,by="TE")
+anc<-subset(a5,region!="cluster")
+anc<-subset(anc,select=c("TE","count"))
+
+for (sid in unique(anc$TE)) { 
+  i <- anc$TE == sid
+  a = sum(anc$count[i])
+  anc$sum[i] = a
+}
+anc<-subset(anc,select=c("TE","sum"))
+anc<-unique(anc)
+
+names(anc)<-c("TE","rest")
+TE5<-full_join(TE5,anc,by="TE")
+TE5$strain<-c("Pi2")
 
 
 
@@ -314,198 +386,79 @@ names(infoP)<-c("TE","AF")
 
 
 
-#summary that needs to be kept:
+#average across assemblies:
 t<-rbind(TE1,TE2,TE3,TE4,TE5)
 
-t[is.na(t)] <- 0
-```
 
-    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
-    ## generated
-
-``` r
-for (sid in unique(t$TE)) { 
-  i <- t$TE == sid
-  a = mean(t$count[i])
-  b = mean(t$butterfly[i])
-  t$avrcl[i] = a
-  t$avrbut[i] = b
-}
-
-t<-subset(t,select = c("TE","avrcl","avrbut"))
-t<-unique(t)
-
+####
 t<-left_join(t,info,by="TE")
 
 #including AF threshold
 t<-subset(t,AF!="NA")##remove missing AFs
 t<-subset(t,AF<=0.2)
-t$clusterlog<-log10(t$avrcl+1)
-t$butterflylog<-log10(t$avrbut+1)
+
+t[is.na(t)] <- 0
+t$sum<-t$butterfly+t$count
+tbut<-subset(t,select=c("TE","sum","strain"))
+names(tbut)<-c("TE","cluster","strain")
+tclu<-subset(t,select=c("TE","count","strain"))
+names(tclu)<-c("TE","cluster","strain")
+
+tbut$id3<-paste(tbut$cluster,tbut$TE,sep="_")
+tclu$id3<-paste(tclu$cluster,tclu$TE,sep="_")
 
 
-gcor<-ggplot(t,aes(x=clusterlog,y=butterflylog))+geom_point()+stat_cor(method = "pearson", label.x = 0.25, label.y = 1.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("cluster insertions")+ylab("butterfly insertions")+scale_x_continuous(breaks=c(0,1,2),labels=c("0","9","99"))+scale_y_continuous(breaks=c(0,1,2),labels=c("0","9","99"))
+tbut$id3<-paste(tbut$cluster,tbut$TE,sep="_")
 
-
-
-a1r<-subset(a1,region!="cluster")
-
-a1r$id2<-paste(a1r$strain,a1r$TE,sep="+")
-for (sid in unique(a1r$id2)) { 
-  i <- a1r$id2 == sid
-  a = sum(a1r$count[i])
-  a1r$sum[i] = a
+for (sid in unique(tbut$id3)) { 
+  i <- tbut$id3 == sid
+  a = nrow(subset(tbut,id3==sid))
+  tbut$sum[i] = a
 }
-a1r<-subset(a1r,select=c("sum","TE","strain"))
-a1r<-unique(a1r)
 
-t1a<-full_join(a1r,TE1,by="TE")
-t1a[is.na(t1a)] <- 0
-```
-
-    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
-    ## generated
-    
-    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
-    ## generated
-
-``` r
-t1a<-left_join(t1a,info,by="TE")
-
-#including AF threshold
-t1a<-subset(t1a,AF!="NA")##remove missing AFs
-t1a<-subset(t1a,AF<=0.2)
-
-
-
-a2r<-subset(a2,region!="cluster")
-
-a2r$id2<-paste(a2r$strain,a2r$TE,sep="+")
-for (sid in unique(a2r$id2)) { 
-  i <- a2r$id2 == sid
-  a = sum(a2r$count[i])
-  a2r$sum[i] = a
+tbut<-subset(tbut,select=c("cluster","TE","sum"))
+tbut<-unique(tbut)
+for (sid in unique(tbut$cluster)) { 
+  i <- tbut$cluster == sid
+  b = sum(tbut$sum[i])
+  tbut$inds[i] = b
 }
-a2r<-subset(a2r,select=c("sum","TE","strain"))
-a2r<-unique(a2r)
 
-t2a<-full_join(a2r,TE2,by="TE")
-t2a[is.na(t2a)] <- 0
-```
+tbut<-subset(tbut,select=c("cluster","inds"))
+tbut<-unique(tbut)
 
-    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
-    ## generated
+tbut$indsrel<-tbut$inds/sum(tbut$inds)
 
-``` r
-t2a<-left_join(t2a,info,by="TE")
-
-#including AF threshold
-t2a<-subset(t2a,AF!="NA")##remove missing AFs
-t2a<-subset(t2a,AF<=0.2)
+tbut$type<-c("with-butterfly")
 
 
+tclu$id3<-paste(tclu$cluster,tclu$TE,sep="_")
 
-
-a3r<-subset(a3,region!="cluster")
-
-a3r$id2<-paste(a3r$strain,a3r$TE,sep="+")
-for (sid in unique(a3r$id2)) { 
-  i <- a3r$id2 == sid
-  a = sum(a3r$count[i])
-  a3r$sum[i] = a
+for (sid in unique(tclu$id3)) { 
+  i <- tclu$id3 == sid
+  a = nrow(subset(tclu,id3==sid))
+  tclu$sum[i] = a
 }
-a3r<-subset(a3r,select=c("sum","TE","strain"))
-a3r<-unique(a3r)
 
-t3a<-full_join(a3r,TE3,by="TE")
-t3a[is.na(t3a)] <- 0
-```
-
-    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
-    ## generated
-
-``` r
-t3a<-left_join(t3a,info,by="TE")
-
-#including AF threshold
-t3a<-subset(t3a,AF!="NA")##remove missing AFs
-t3a<-subset(t3a,AF<=0.2)
-
-
-
-
-a4r<-subset(a4,region!="cluster")
-
-a4r$id2<-paste(a4r$strain,a4r$TE,sep="+")
-for (sid in unique(a4r$id2)) { 
-  i <- a4r$id2 == sid
-  a = sum(a4r$count[i])
-  a4r$sum[i] = a
+tclu<-subset(tclu,select=c("cluster","TE","sum"))
+tclu<-unique(tclu)
+for (sid in unique(tclu$cluster)) { 
+  i <- tclu$cluster == sid
+  b = sum(tclu$sum[i])
+  tclu$inds[i] = b
 }
-a4r<-subset(a4r,select=c("sum","TE","strain"))
-a4r<-unique(a4r)
 
-t4a<-full_join(a4r,TE4,by="TE")
-t4a[is.na(t4a)] <- 0
-```
+tclu<-subset(tclu,select=c("cluster","inds"))
+tclu<-unique(tclu)
 
-    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
-    ## generated
-    
-    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
-    ## generated
+tclu$indsrel<-tclu$inds/sum(tclu$inds)
 
-``` r
-t4a<-left_join(t4a,info,by="TE")
+tclu$type<-c("cluster-only")
 
-#including AF threshold
-t4a<-subset(t4a,AF!="NA")##remove missing AFs
-t4a<-subset(t4a,AF<=0.2)
+t<-rbind(tbut,tclu)
 
-
-
-a5r<-subset(a5,region!="cluster")
-
-a5r$id2<-paste(a5r$strain,a5r$TE,sep="+")
-for (sid in unique(a5r$id2)) { 
-  i <- a5r$id2 == sid
-  a = sum(a5r$count[i])
-  a5r$sum[i] = a
-}
-a5r<-subset(a5r,select=c("sum","TE","strain"))
-a5r<-unique(a5r)
-
-t5a<-full_join(a5r,TE5,by="TE")
-t5a[is.na(t5a)] <- 0
-```
-
-    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
-    ## generated
-    
-    ## Warning in `[<-.factor`(`*tmp*`, thisvar, value = 0): invalid factor level, NA
-    ## generated
-
-``` r
-t5a<-left_join(t5a,info,by="TE")
-
-#including AF threshold
-t5a<-subset(t5a,AF!="NA")##remove missing AFs
-t5a<-subset(t5a,AF<=0.2)
-
-
-
-ta<-rbind(t1a,t2a,t3a,t4a,t5a)
-ta0<-subset(ta,count==0)
-
-hier<-read.table("/Users/filipwierzbicki/Desktop/trap_model/data/other/new_dmel_132cons_hier",header =TRUE)
-hier<-subset(hier,select=c("id","family"))
-names(hier)<-c("TE","family")
-ta0<-left_join(ta0,hier,by="TE")
-ta0<-subset(ta0,select=c("family","sum","butterfly","count","strain.x"))
-names(ta0)<-c("family","non-cluster","other-SL","cluster","strain")
-
-write.table(ta0,"/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/output/missing-clusterinsertions.txt",quote=FALSE)
+ghis<-ggplot(t, aes(x=cluster, y=indsrel,fill=type))+ geom_bar(stat="identity",position = "dodge")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(-1,31)+
+  theme_bw()+theme(legend.position="top")+scale_fill_discrete(name=NULL)
 
 
 ####signatures at BUSCO VS TE:
@@ -880,20 +833,24 @@ frac$rel<-frac$sum.x/frac$sum.y
 frac<-subset(frac,select=c("strain.x","type.x","rel"))
 names(frac)<-c("strain","type","rel")
 
-gbt<-ggplot(frac,aes(x=strain,y=rel,alpha=type))+geom_bar(stat="identity",position="dodge",color="black") +ylab("fraction of butterflies")+xlab("strain")+theme_bw()#+theme(legend.position='none')
-
-g<-ggarrange(gbt, gcor,
-                labels = c("A", "B"),
-                ncol = 1, nrow = 2)
+gbt<-ggplot(frac,aes(x=strain,y=rel,alpha=type))+geom_bar(stat="identity",position="dodge",color="black") +ylab("fraction of butterflies")+xlab("strain")+theme_bw()+theme(legend.position="top")+scale_alpha_discrete(name=NULL)
 ```
 
     ## Warning: Using alpha for a discrete variable is not advised.
 
 ``` r
+g<-ggarrange(gbt, ghis,
+                labels = c("B", "C"),
+                ncol = 1, nrow = 2)
+```
+
+    ## Warning: Removed 139 rows containing missing values (geom_bar).
+
+``` r
 plot(g)
 ```
 
-![](butterfly-cor_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](butterfly-main_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly_main.pdf",width=7,height=6)
