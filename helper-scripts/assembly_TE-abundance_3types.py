@@ -44,8 +44,8 @@ outputdir=args.output
 sample=args.sample
 approach=args.approach
 
-toit=collections.defaultdict((lambda:collections.defaultdict(lambda:collections.defaultdict(lambda:[str,int]))))
-rest=collections.defaultdict((lambda:collections.defaultdict(lambda:collections.defaultdict(lambda:[str,int]))))
+toit=collections.defaultdict((lambda:collections.defaultdict(lambda:collections.defaultdict(lambda:[str,str]))))
+rest=collections.defaultdict((lambda:collections.defaultdict(lambda:collections.defaultdict(lambda:[str,str]))))
 topr=collections.defaultdict((lambda:collections.defaultdict(lambda:[str])))
 toprrest=collections.defaultdict((lambda:collections.defaultdict(lambda:[str])))
 
@@ -54,7 +54,7 @@ aburest=collections.defaultdict((lambda:[0]))
 
 
 
-toitref=collections.defaultdict((lambda:collections.defaultdict(lambda:collections.defaultdict(lambda:[str,int]))))
+toitref=collections.defaultdict((lambda:collections.defaultdict(lambda:collections.defaultdict(lambda:[str,str]))))
 reftopr=collections.defaultdict((lambda:collections.defaultdict(lambda:[str])))
 refabupr=collections.defaultdict((lambda:[0]))
 
