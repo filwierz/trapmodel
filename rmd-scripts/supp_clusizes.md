@@ -15,8 +15,6 @@ nohup sh -c 'python ../../scripts/simstorm-pic0.35.py --number 300 --threads 30 
 library(dplyr)
 ```
 
-    ## Warning: package 'dplyr' was built under R version 3.6.3
-
     ## 
     ## Attaching package: 'dplyr'
 
@@ -31,17 +29,12 @@ library(dplyr)
 ``` r
 library(ggplot2)
 library(ggpubr)
-```
-
-    ## Warning: package 'ggpubr' was built under R version 3.6.3
-
-``` r
 gentx=2000
 
 
 ####pic0.35%
 
-tally<-read.table("/Users/Filip/Desktop/simulation/pic0.35/tally-pic0.35")
+tally<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/pic0.35/tally-pic0.35") 
 
 
 names(tally)<-c("replicate","generation","type","abundance","number")
@@ -75,7 +68,7 @@ ts$rel<-ts$sum/sum(ts$sum)
 historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("reference insertions")
 
 
-output<-read.table("/Users/Filip/Desktop/simulation/pic0.35/output-pic0.35")
+output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/pic0.35/output-pic0.35")
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
@@ -119,9 +112,11 @@ g01<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
     ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
 ``` r
+g01<-annotate_figure(g01,top = text_grob("piRNA cluster/reference region size: 0.35%"))
+
 ####pic3.5%
 
-tally<-read.table("/Users/Filip/Desktop/simulation/pic3.5/tally-pic3.5")
+tally<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/constant-u/run3-seed/combined/tally-constant_u")
 
 
 names(tally)<-c("replicate","generation","type","abundance","number")
@@ -155,7 +150,7 @@ ts$rel<-ts$sum/sum(ts$sum)
 historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("reference insertions")
 
 
-output<-read.table("/Users/Filip/Desktop/simulation/pic3.5/output-pic3.5")
+output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/constant-u/run3-seed/combined/output-constant_u")
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
@@ -199,9 +194,11 @@ g001<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
     ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
 ``` r
+g001<-annotate_figure(g001,top = text_grob("piRNA cluster/reference region size: 3.5%"))
+
 ####pic35.0%
 
-tally<-read.table("/Users/Filip/Desktop/simulation/pic35.0/tally-pic35.0")
+tally<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/pic35.0/tally-pic35.0")
 
 
 names(tally)<-c("replicate","generation","type","abundance","number")
@@ -235,7 +232,7 @@ ts$rel<-ts$sum/sum(ts$sum)
 historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("reference insertions")
 
 
-output<-read.table("/Users/Filip/Desktop/simulation/pic35.0/output-pic35.0")
+output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/pic35.0/output-pic35.0")
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
@@ -279,19 +276,21 @@ g0001<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
     ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
 ``` r
+g0001<-annotate_figure(g0001,top = text_grob("piRNA cluster/reference region size: 35%"))
+
 #############
 #combine plots:
 
-g<-ggarrange(g0001,g001,g01,
+g<-ggarrange(g01,g001,g0001,
              labels = c("A","B","C"),
              ncol = 1, nrow = 3)
 
 plot(g)
 ```
 
-![](supp_clusizes_files/figure-markdown_github/unnamed-chunk-2-1.png)
+![](supp_clusizes_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
-ggsave("/Users/Filip/Desktop/simulation/figures/simulations_supp-clusizes.pdf",height = 12,width = 12)
-ggsave("/Users/Filip/Desktop/simulation/figures/simulations_supp-clusizes.png",height = 12,width = 12)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-clusizes.pdf",height = 12,width = 12)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-clusizes.png",height = 12,width = 12)
 ```
