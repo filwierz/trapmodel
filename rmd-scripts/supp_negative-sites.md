@@ -1,15 +1,9 @@
----
-title: "simulations_supp-negative-sites"
-author: "Filip Wierzbicki"
-date: "6/28/2022"
-output: rmarkdown::github_document
----
+simulations\_supp-negative-sites
+================
+Filip Wierzbicki
+6/28/2022
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{bash,eval=FALSE}
+``` bash
 #cmds to run invade-simulation on vetlinux05
 nohup sh -c 'python ../../scripts/simstorm-sitex01-IF_weaker.py --number 300 --threads 12 --output sitex01- --invade ../../invade-v0808.jar --silent' &
 nohup sh -c 'python ../../scripts/simstorm-sitex03-IF_weaker.py --number 300 --threads 12 --output sitex03- --invade ../../invade-v0808.jar --silent' &
@@ -18,8 +12,22 @@ nohup sh -c 'python ../../scripts/simstorm-sitex07-IF_weaker.py --number 300 --t
 #followed by concatenation of output-* and tally-* files to load into R
 ```
 
-```{r cars}
+``` r
 library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 library(ggplot2)
 library(ggpubr)
 gentx=2000
@@ -65,10 +73,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-            "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-            "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-            "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-            "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+            "fwt",  "w",    "tes",  "popfreq",  "fixed","delim2",
+            "fwcli",    "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+            "fwrefi",   "refins",   "refins_popfreq", "refins_fixed","delim4",
+            "novel",    "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -100,8 +108,11 @@ trajectories<-ggplot(output, aes(x = generation, y = tes, group = replicate,col=
 g10<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
              #labels = c("A","B","C","D","E"),
              ncol = 5, nrow = 1)
+```
 
+    ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
+``` r
 ####30%
 
 tally<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/sitex03-weaker/tally-sitex03-weaker.txt")
@@ -142,10 +153,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-            "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-            "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-            "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-            "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+            "fwt",  "w",    "tes",  "popfreq",  "fixed","delim2",
+            "fwcli",    "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+            "fwrefi",   "refins",   "refins_popfreq", "refins_fixed","delim4",
+            "novel",    "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -177,9 +188,11 @@ trajectories<-ggplot(output, aes(x = generation, y = tes, group = replicate,col=
 g30<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
              #labels = c("A","B","C","D","E"),
              ncol = 5, nrow = 1)
+```
 
+    ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
-
+``` r
 ####50%
 
 tally<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/sitex05-weaker/tally-sitex05-weaker.txt")
@@ -220,10 +233,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-            "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-            "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-            "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-            "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+            "fwt",  "w",    "tes",  "popfreq",  "fixed","delim2",
+            "fwcli",    "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+            "fwrefi",   "refins",   "refins_popfreq", "refins_fixed","delim4",
+            "novel",    "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -255,9 +268,11 @@ trajectories<-ggplot(output, aes(x = generation, y = tes, group = replicate,col=
 g50<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
              #labels = c("A","B","C","D","E"),
              ncol = 5, nrow = 1)
+```
 
+    ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
-
+``` r
 ####70%
 
 tally<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/sitex07-weaker/tally-sitex07-weaker.txt")
@@ -298,10 +313,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-            "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-            "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-            "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-            "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+            "fwt",  "w",    "tes",  "popfreq",  "fixed","delim2",
+            "fwcli",    "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+            "fwrefi",   "refins",   "refins_popfreq", "refins_fixed","delim4",
+            "novel",    "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -333,10 +348,11 @@ trajectories<-ggplot(output, aes(x = generation, y = tes, group = replicate,col=
 g70<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
              #labels = c("A","B","C","D","E"),
              ncol = 5, nrow = 1)
+```
 
+    ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
-
-
+``` r
 #############
 #combine plots:
 
@@ -345,12 +361,11 @@ g<-ggarrange(g10,g30,g50,g70,
              ncol = 1, nrow = 4)
 
 plot(g)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-negative-site.pdf",height = 12,width = 12)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-negative-site.png",height = 12,width = 12)
-
 ```
 
+![](supp_negative-sites_files/figure-gfm/cars-1.png)<!-- -->
 
-
-
-
+``` r
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-negative-site.pdf",height = 12,width = 12)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-negative-site.png",height = 12,width = 12)
+```
