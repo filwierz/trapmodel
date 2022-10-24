@@ -1,15 +1,9 @@
----
-title: "main-simulation"
-author: "Filip Wierzbicki"
-date: "6/17/2022"
-output: rmarkdown::github_document
----
+main-simulation
+================
+Filip Wierzbicki
+6/17/2022
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{bash,eval=FALSE}
+``` bash
 #cmds to run invade-simulation on vetlinux05
 nohup sh -c 'python ../../../scripts/simstorm-constant-u-seed.py --number 300 --threads 60 --output output-constant_u- --invade ../../../invade-v0808.jar --silent' &
 nohup sh -c 'python ../../scripts/simstorm-variable-u_unif.py --number 300 --threads 30 --output output-varu_unif- --invade ../../invade-v0808.jar --silent' &
@@ -17,8 +11,22 @@ nohup sh -c 'python ../../scripts/simstorm-site04xMULT.py --number 300 --threads
 #followed by concatenation of output-* and tally-* files to load into R
 ```
 
-```{R,eval=TRUE}
+``` r
 library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 library(ggplot2)
 library(ggpubr)
 gentx=2000
@@ -61,10 +69,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-            "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-            "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-            "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-            "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+            "fwt",  "w",    "tes",  "popfreq",  "fixed","delim2",
+            "fwcli",    "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+            "fwrefi",   "refins",   "refins_popfreq", "refins_fixed","delim4",
+            "novel",    "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -96,7 +104,11 @@ trajectories<-ggplot(output, aes(x = generation, y = tes, group = replicate,col=
 gconsu<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
              #labels = c("A","B","C","D","E"),
              ncol = 5, nrow = 1)
+```
 
+    ## Warning: Removed 7500 row(s) containing missing values (geom_path).
+
+``` r
 ############################
 #variable time points
 
@@ -106,10 +118,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-                 "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-                 "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-                 "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-                 "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+                 "fwt", "w",    "tes",  "popfreq",  "fixed","delim2",
+                 "fwcli",   "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+                 "fwrefi",  "refins",   "refins_popfreq", "refins_fixed","delim4",
+                 "novel",   "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -221,8 +233,11 @@ historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab
 gvart<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
              #labels = c("A","B","C","D","E"),
              ncol = 5, nrow = 1)
+```
 
+    ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
+``` r
 ###############
 #variable U:
 
@@ -272,10 +287,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-            "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-            "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-            "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-            "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+            "fwt",  "w",    "tes",  "popfreq",  "fixed","delim2",
+            "fwcli",    "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+            "fwrefi",   "refins",   "refins_popfreq", "refins_fixed","delim4",
+            "novel",    "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -307,9 +322,11 @@ trajectories<-ggplot(output, aes(x = generation, y = tes, group = replicate,col=
 gvaru<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
              #labels = c("A","B","C","D","E"),
              ncol = 5, nrow = 1)
+```
 
+    ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
-
+``` r
 ##############
 #negative selection:
 
@@ -354,10 +371,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-            "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-            "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-            "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-            "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+            "fwt",  "w",    "tes",  "popfreq",  "fixed","delim2",
+            "fwcli",    "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+            "fwrefi",   "refins",   "refins_popfreq", "refins_fixed","delim4",
+            "novel",    "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -389,8 +406,11 @@ trajectories<-ggplot(output, aes(x = generation, y = tes, group = replicate,col=
 gneg<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
              #labels = c("A","B","C","D","E"),
              ncol = 5, nrow = 1)
+```
 
+    ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
+``` r
 #############
 #combine plots:
 
@@ -399,9 +419,11 @@ g<-ggarrange(gconsu,gvart,gvaru,gneg,
              ncol = 1, nrow = 4)
 
 plot(g)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_main.pdf",height = 12,width = 12)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_main.png",height = 12,width = 12)
-
 ```
 
+![](main-simulation_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
+``` r
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_main.pdf",height = 12,width = 12)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_main.png",height = 12,width = 12)
+```
