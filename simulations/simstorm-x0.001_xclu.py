@@ -19,20 +19,21 @@ def current_milli_time():
 # --silent --steps 20  --no-x-cluins --simid 'kb100'  > diffclusi/kb100.txt &
                                     
 def get_basis(invade):
-    return "java -Xmx4g -jar {0} cluster --ignore-failed --no-x-cluins --gen 10000 --steps 100 --max-ins 10000 --min-w 0.1 --genome kb:40000,40000,40000,40000,40000 --rr cm_mb:4,4,4,4,4 --cluster each:kb:1400 --ref each:kb:1400 --rep 1 --silent".format(invade)
+    return "java -Xmx4g -jar {0} cluster --ignore-failed --gen 10000 --steps 100 --max-ins 10000 --min-w 0.1 --genome kb:40000,40000,40000,40000,40000 --rr cm_mb:4,4,4,4,4 --cluster each:kb:1400 --ref each:kb:1400 --rep 1 --silent".format(invade)
 
 def get_filter():
     return "| grep -v \"^#\" | awk '$28!=\"base\"' "
 
 def get_rand_u():
-    # from 0.005 to 0.5 uniformly log distributed
-    #return 10**random.uniform(-0.301029995664,-2.30103)
+    # from 0.005 to 0.5 uniformly distributed
+    #return random.uniform(0.5,0.005)
     return 0.1
 
-#def get_rand_x():
-    # from 0.0001 to 0.5 uniformly log distributed
-    #return 10**random.uniform(-0.301029995664,-4)
-    #return 0.0
+def get_rand_x():
+    # from 0.005 to 0.5 uniformly distributed
+    #return random.uniform(0.01,0.001)
+    return 0.001
+    
     
 
 
@@ -43,12 +44,12 @@ def run_cluster_negsel(invade,count,output):
     basis =get_basis(invade) 
     commandlist=[]
     for i in range(0,count):
-        #x=get_rand_x()
+        x=get_rand_x()
         u=get_rand_u()
         tr=current_milli_time()+i
-        command=basis+" --nsmodel site:0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.0,0.0,0.0 --u {0} --replicate-offset {1} --tally-file tally{1}.txt --sfs-file sfs{1}.txt --hohe-file hohe{1}.txt --mhp-file mhp{1}.txt --N 1000 --basepop seg:1000 --seed {2} ".format(u,i,tr)
+        command=basis+" --x {0} --u {1} --replicate-offset {2} --tally-file tally{2}.txt --sfs-file sfs{2}.txt --hohe-file hohe{2}.txt --mhp-file mhp{2}.txt --N 1000 --basepop seg:1000 --seed {3} ".format(x,u,i,tr)
         ri=random.random()
-        command+= "--simid \"{0}\"  {1} > {2}{3}".format(u,get_filter(),output,i)
+        command+= "--simid \"{0}\t{1}\"  {2} > {3}{4}".format(x,u,get_filter(),output,i)
         commandlist.append(command)
     return commandlist;
 

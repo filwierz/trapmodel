@@ -46,7 +46,7 @@ def run_cluster_negsel(invade,count,output):
         #x=get_rand_x()
         u=get_rand_u()
         tr=current_milli_time()+i
-        command=basis+" --nsmodel site:0.1,0.1,0.1,0.1,0.1,0.0,0.0,0.0,0.0,0.0 --u {0} --replicate-offset {1} --tally-file tally{1}.txt --sfs-file sfs{1}.txt --hohe-file hohe{1}.txt --mhp-file mhp{1}.txt --N 1000 --basepop seg:1000 --seed {2} ".format(u,i,tr)
+        command=basis+" --nsmodel site:0.01,0.01,0.01,0.01,0.01,0.0,0.0,0.0,0.0,0.0 --u {0} --replicate-offset {1} --tally-file tally{1}.txt --sfs-file sfs{1}.txt --hohe-file hohe{1}.txt --mhp-file mhp{1}.txt --N 1000 --basepop seg:1000 --seed {2} ".format(u,i,tr)
         ri=random.random()
         command+= "--simid \"{0}\"  {1} > {2}{3}".format(u,get_filter(),output,i)
         commandlist.append(command)
