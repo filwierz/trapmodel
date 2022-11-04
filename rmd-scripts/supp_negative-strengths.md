@@ -1,15 +1,9 @@
----
-title: "supp-negative_strengths"
-author: "Filip Wierzbicki"
-date: "6/27/2022"
-output: rmarkdown::github_document
----
+supp-negative\_strengths
+================
+Filip Wierzbicki
+6/27/2022
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{bash,eval=FALSE}
+``` bash
 #cmds to run invade-simulation on vetlinux05
 nohup sh -c 'python ../../scripts/simstorm-x0.01.py --number 300 --threads 20 --output x0.01- --invade ../../invade-v0808.jar --silent' &
 nohup sh -c 'python ../../scripts/simstorm-x0.001.py --number 300 --threads 20 --output x0.001- --invade ../../invade-v0808.jar --silent' &
@@ -17,9 +11,22 @@ nohup sh -c 'python ../../scripts/simstorm-x0.0001.py --number 300 --threads 20 
 #followed by concatenation of output-* and tally-* files to load into R
 ```
 
-```{r cars,eval=TRUE}
-
+``` r
 library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 library(ggplot2)
 library(ggpubr)
 gentx=2000
@@ -81,10 +88,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-            "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-            "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-            "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-            "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+            "fwt",  "w",    "tes",  "popfreq",  "fixed","delim2",
+            "fwcli",    "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+            "fwrefi",   "refins",   "refins_popfreq", "refins_fixed","delim4",
+            "novel",    "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -117,8 +124,11 @@ trajectories<-ggplot(output, aes(x = generation, y = tes, group = replicate,col=
 g01<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
              #labels = c("A","B","C","D","E"),
              ncol = 5, nrow = 1)
+```
 
+    ## Warning: Removed 4950 row(s) containing missing values (geom_path).
 
+``` r
 ####x0.001
 
 tally<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/x0.001/combined/tally_x0.001.txt")
@@ -159,10 +169,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-            "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-            "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-            "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-            "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+            "fwt",  "w",    "tes",  "popfreq",  "fixed","delim2",
+            "fwcli",    "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+            "fwrefi",   "refins",   "refins_popfreq", "refins_fixed","delim4",
+            "novel",    "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -194,8 +204,11 @@ trajectories<-ggplot(output, aes(x = generation, y = tes, group = replicate,col=
 g001<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
              #labels = c("A","B","C","D","E"),
              ncol = 5, nrow = 1)
+```
 
+    ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
+``` r
 ####x0.0001
 
 tally<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/x0.0001/combined/tally_x0.0001.txt")
@@ -236,10 +249,10 @@ output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulatio
 
 output<-output[,-28]
 names(output)<-c("replicate","generation","delim1",
-            "fwt",	"w",	"tes",	"popfreq",	"fixed","delim2",
-            "fwcli",	"cluins",	"cluins_popfreq","cluins_fixed",	"phase","delim3",
-            "fwrefi",	"refins",	"refins_popfreq", "refins_fixed","delim4",
-            "novel",	"sites",	"clusites",	"tes_stdev"	,"cluins_stdev"	,"fw0",	"w_min","popsize")
+            "fwt",  "w",    "tes",  "popfreq",  "fixed","delim2",
+            "fwcli",    "cluins",   "cluins_popfreq","cluins_fixed",    "phase","delim3",
+            "fwrefi",   "refins",   "refins_popfreq", "refins_fixed","delim4",
+            "novel",    "sites",    "clusites", "tes_stdev" ,"cluins_stdev" ,"fw0", "w_min","popsize")
 
 
 
@@ -271,10 +284,11 @@ trajectories<-ggplot(output, aes(x = generation, y = tes, group = replicate,col=
 g0001<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
              #labels = c("A","B","C","D","E"),
              ncol = 5, nrow = 1)
+```
 
+    ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
-
-
+``` r
 #############
 #combine plots:
 
@@ -283,7 +297,11 @@ g<-ggarrange(g0001,g001,g01,
              ncol = 1, nrow = 3)
 
 plot(g)
+```
+
+![](supp_negative-strengths_files/figure-gfm/cars-1.png)<!-- -->
+
+``` r
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-negative-strength.pdf",height = 12,width = 12)
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-negative-strength.png",height = 12,width = 12)
-
 ```
