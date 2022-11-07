@@ -116,6 +116,6 @@ plot(g)
 ![](supp_random-negative_effects_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-random-negative-effects.pdf",height = 12,width = 12)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-random-negative-effects.png",height = 12,width = 12)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-random-negative-effects.pdf",height = 4,width = 12)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-random-negative-effects.png",height = 4,width = 12)
 ```
