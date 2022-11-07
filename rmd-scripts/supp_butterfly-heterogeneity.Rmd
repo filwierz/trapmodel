@@ -1,3 +1,18 @@
+---
+title: "supp_butterfly-heterogeneity"
+author: "Filip Wierzbicki"
+date: "11/7/2022"
+output: rmarkdown::github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This script plots the heterogeneity of buttefly abundance among TEs and fly strains.
+Note that the preprocessing steps can be found in the script from the main butterfly figure.
+
+```{r ,eval=TRUE}
 
 library(dplyr)
 library(ggplot2)
@@ -308,15 +323,11 @@ rel<-rel+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=eleme
 gr<-ggplot(frac,aes(x=family,y=rel,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("fraction of butterflies")+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank())
 
 g<-ggarrange(abs,ga, rel,gr,
-             
+             labels = c("A", "B","C","D"),
              ncol = 1, nrow = 4)
-#labels = c("A", "B","C","D"),
 plot(g)
 
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly-heterogeneity.pdf",width=12,height=10)
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly-heterogeneity.png",width=12,height=10)
 
-
-
-
-
+```
