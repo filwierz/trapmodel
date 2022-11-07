@@ -1,7 +1,7 @@
 supp-negative\_strengths-xclu
 ================
 Filip Wierzbicki
-6/27/2022
+11/7/2022
 
 ``` bash
 #cmds to run invade-simulation on vetlinux05
@@ -93,9 +93,9 @@ reference$type<-c("reference")
 cr<-rbind(cluster,reference)
 
 
-correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 12.5,size=3)+ 
+correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 10, label.y = 2.5,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("piRNA clusters")
-correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 15.0,size=3)+ 
+correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 10, label.y = 2,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
 
 ####trajectories:
@@ -173,9 +173,9 @@ reference$type<-c("reference")
 cr<-rbind(cluster,reference)
 
 
-correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 12.5,size=3)+ 
+correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 25, label.y = 10,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("piRNA clusters")
-correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 15.0,size=3)+ 
+correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 25, label.y = 10,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
 
 ####trajectories:
@@ -253,9 +253,9 @@ reference$type<-c("reference")
 cr<-rbind(cluster,reference)
 
 
-correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 12.5,size=3)+ 
+correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 25, label.y = 12,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("piRNA clusters")
-correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 15.0,size=3)+ 
+correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 25, label.y = 16.0,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
 
 ####trajectories:
@@ -283,7 +283,7 @@ g<-ggarrange(g0001,g001,g01,
 plot(g)
 ```
 
-![](negative-strengths_xclu_files/figure-gfm/cars-1.png)<!-- -->
+![](supp_negative-strengths_xclu_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
 ggsave("/Users/filipwierzbicki/Desktop/trap_model/figures/simulations/simulations_supp-negative-strength_xclu.pdf",height = 12,width = 12)
