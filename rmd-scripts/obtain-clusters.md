@@ -1,22 +1,15 @@
----
-title: "obtain-clusters"
-author: "Filip Wierzbicki"
-date: "4/6/2022"
-output: rmarkdown::github_document
----
+obtain-clusters
+================
+Filip Wierzbicki
+4/6/2022
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+This scripts contains the pipeline for obtaining piRNA cluster and
+reference region (control region) annotations.
 
-This scripts contains the pipeline for obtaining piRNA cluster and reference region (control region) annotations.
+Note: make-directory are usually not included and also change directory
+only for rough orientation included but not completely
 
-Note:
-make-directory are usually not included and also change directory only for rough orientation included but not completely
-
-
-
-```{bash cusco, eval=FALSE}
+``` bash
 
 cd /Users/filipwierzbicki/Desktop/trap_model/data/core/assemblies
 
@@ -33,9 +26,7 @@ for i in *cluster.bed;do n=${i};cat $i|awk '$5=="1000"'|sort -k1,1 -k2,2n > gapl
 for i in *bed;do n=${i};bedtools merge -i $i -o distinct -c 4,5,6 > distinct/${n};done
 ```
 
-
-
-```{bash reference regions, eval=FALSE}
+``` bash
 
 #note here gapped cluster annotations are considered 
 
@@ -54,9 +45,7 @@ cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/ref_recover/
 for i in *_cluster.bed;do n=${i%_cluster.bed};python /Users/filipwierzbicki/Desktop/trap_model/scripts/reference_recover.py --clu $i --hel /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/ref/ref_recover/helper_files/${n}_contigs.txt --polyn /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/ref/ref_recover/polyn/${n}.polyn > ../ref_bed/${n}_ref.bed;done
 ```
 
-
-
-```{bash XTAS clusters, eval=FALSE}
+``` bash
 cd /Users/filipwierzbicki/Desktop/trap_model/data/core/assemblies
 
 for i in *fasta;do n=${i%.fasta};bwa bwasw $i /Users/filipwierzbicki/Desktop/trap_model/analysis/cluster/TAS/playground/first_genes/first_genes.fasta > /Users/filipwierzbicki/Desktop/trap_model/analysis/cluster/TAS/playground/first_genes/${n}.sam;done
@@ -72,10 +61,7 @@ cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/TAS_cluster_
 for i in *_cluster.bed;do n=${i%_cluster.bed};cat $i /Users/filipwierzbicki/Desktop/trap_model/analysis/cluster/cusco/bwasw/cluster_bed/gapless/distinct/$i|sort -k1,1 -k2,2n|bedtools merge -i - -o distinct -c 4,5,6 > ../combined-distinct/$i;done
 ```
 
-
-
-
-```{bash proTRAC, eval=FALSE}
+``` bash
 #trimming for Canton-S, Pi2, Iso1:
 /Users/fschwarz/.local/bin/cutadapt -j 20 -a TGGAATTCTCGGGTGCCAAGGAACTCCAGTCACCATTTTATCTCGTATGC -o trimmed/Pi2.fastq Pi2.fastq
  
@@ -106,13 +92,9 @@ for i in p0.*/proTRAC_*;do n=${i%.map*};n=${n#p0.*/proTRAC_};st=${i%/proTRAC*};c
 cd minimal_cluster_bed
 
 for i in *.bed;do n=${i%.bed};g=${n%_*};python /Users/filipwierzbicki/Desktop/trap_model/scripts/merge_proTRAC_clusters.py --bed $i --polyn ../../merge_annotations/polyn/${g}.polyn > ../cluster_bed/${n}_cluster.bed;done
-
-
 ```
 
-
-
-```{bash with gapped cusco, eval=FALSE}
+``` bash
 cd /Users/filipwierzbicki/Desktop/trap_model/analysis/cluster/cusco/bwasw/cluster_bed
 
 mkdir distinct
@@ -121,13 +103,10 @@ for i in *bed;do n=${i};cat $i|sort -k1,1 -k2,2n|bedtools merge -i - -o distinct
 cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/TAS_cluster_bed
 
 for i in *_cluster.bed;do n=${i%_cluster.bed};cat $i /Users/filipwierzbicki/Desktop/trap_model/analysis/cluster/cusco/bwasw/cluster_bed/distinct/$i|sort -k1,1 -k2,2n|bedtools merge -i - -o distinct -c 4,5,6 > ../gapped_combined-distinct/$i;done
-
 ```
 
-
-```{bash with gapped cusco and gapped proTRAC, eval=FALSE}
+``` bash
 cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct
 
 for i in *_cluster.bed;do n=${i%_cluster.bed};cat $i /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/${n}_p0.05_cluster.bed|sort -k1,1 -k2,2n|bedtools merge -i - -o distinct -c 4,5,6 > /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas_protrac/gapped_combined-distinct/$i;done
-
 ```
