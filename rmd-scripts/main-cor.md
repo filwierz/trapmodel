@@ -25,6 +25,7 @@ library(dplyr)
 ``` r
 library(ggplot2)
 library(ggpubr)
+library(ggtext)
 ####
 #simulation
 output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/constant-u/run3-seed/combined/output-constant_u")
@@ -50,7 +51,7 @@ t$global<-t$global/2 #for halpoid abundance
 t$local<-t$local/2 #for halpoid abundance
 
 
-gS<-ggplot(t, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 50.1, label.y = 6.5,size=3)+ 
+gS<-ggplot(t, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", label.x = 50.1, label.y = 6.5,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+xlim(50,200)+ggtitle("Expected: Simulated invasions \n under the trap model")
 
 
@@ -144,7 +145,7 @@ cC$cluster<-log10(cC$avrcl+1)
 cC$noncluster<-log10(cC$avrrest+1)
 
 
-gPop<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 1.42,size=3)+ 
+gPop<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "kendall", label.x = 0.1, label.y = 1.42,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+ggtitle("Observed: Short-read based TE calls \n in known clusters")
 
 
@@ -220,7 +221,7 @@ cC$cluster<-log10(cC$avrcl+1)
 cC$noncluster<-log10(cC$avrrest+1)
 
 
-gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "pearson", label.x = 0.5, label.y = 2.0,size=3)+ 
+gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "kendall", label.x = 0.5, label.y = 2.0,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+ggtitle("Observed: known clusters \n in long-read assemblies ")
 
 
@@ -289,8 +290,8 @@ cC$cluster<-log10(cC$avrcl+1)
 cC$noncluster<-log10(cC$avrrest+1)
 
 
-gP<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "pearson", label.x = 1, label.y = 2,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+ggtitle("Observed: denovo-called clusters \n in long-read assemblies ")
+gP<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "kendall", label.x = 1, label.y = 2,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+ggtitle("Observed: *de novo*-called clusters<br>in long-read assemblies ")+theme(plot.title = element_markdown())
 
 
 
