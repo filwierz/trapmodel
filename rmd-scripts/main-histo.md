@@ -49,7 +49,7 @@ for i in *_cluster.bed;do n=${i%_cluster.bed};mkdir ${n};python /Users/filipwier
 
 ``` bash
 cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed
-for i in *_p0.05_cluster.bed;do n=${i%_p0.05_cluster.bed};mkdir ${n};python /Users/filipwierzbicki/Desktop/trap_model/github/trapmodel/helper-scripts/assembly_TE-abundance_3types.py --clu $i --rm /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/whole-genome/repeatmasker/${n}.fasta.out --output ${n}/ --sample ${n}_p0.05 --approach gapped_protrac --minlen 100 --maxdiv 10.0 ;done
+for i in *_cluster.bed;do n=${i%_cluster.bed};mkdir ${n};python /Users/filipwierzbicki/Desktop/trap_model/github/trapmodel/helper-scripts/assembly_TE-abundance_3types.py --clu $i --rm /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/whole-genome/repeatmasker/${n}.fasta.out --output ${n}/ --sample ${n}_p0.05 --approach gapped_protrac --minlen 100 --maxdiv 10.0 ;done
 ```
 
 ``` r
@@ -70,6 +70,7 @@ library(dplyr)
 ``` r
 library(ggplot2)
 library(ggpubr)
+library(ggtext)
 
 #simulations:
 t<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/constant-u/run3-seed/combined/tally-constant_u")
@@ -445,8 +446,7 @@ prt<-unique(prt)
 prt$indsrel<-prt$inds/sum(prt$inds)
 
 
-proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(-1,31)+ggtitle("Observed: denovo-called clusters \n in long-read assemblies ")#+ylim(0,0.35)
-
+proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(-1,31)+ggtitle("Observed: *de novo*-called clusters<br>in long-read assemblies ")+theme(plot.title = element_markdown())
 
 
 
@@ -460,7 +460,7 @@ g<-ggarrange(simu, popTE2, real, proT,
 
     ## Warning: Removed 1 rows containing missing values (geom_bar).
 
-    ## Warning: Removed 44 rows containing missing values (position_stack).
+    ## Warning: Removed 30 rows containing missing values (position_stack).
 
     ## Warning: Removed 1 rows containing missing values (geom_bar).
 
