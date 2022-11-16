@@ -95,23 +95,17 @@ uq=0
 tso<-ts[order(ts$abundance),]
 for (row in 1:nrow(tso)) { 
   lq=lq+tso$rel[row]
-  if (lq==0.01){
-    alq=tso$abundance[row]
-    break
-  }
+  
   if(lq>0.01){
-    alq=tso$abundance[row-1]
+    alq=(tso$abundance[row]+tso$abundance[row-1])/2
     break
   }
 }
 for (row in 1:nrow(tso)) { 
   uq=uq+tso$rel[row]
-  if (uq==0.99){
-    auq=tso$abundance[row]
-    break
-  }
+  
   if(uq>0.99){
-    auq=tso$abundance[row-1]
+    auq=(tso$abundance[row]+tso$abundance[row+1])/2
     break
   }
 }
