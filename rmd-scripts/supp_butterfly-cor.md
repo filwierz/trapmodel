@@ -331,7 +331,7 @@ t$clusterlog<-log10(t$avrcl+1)
 t$butterflylog<-log10(t$avrbut+1)
 
 
-gcor<-ggplot(t,aes(x=clusterlog,y=butterflylog))+geom_point()+stat_cor(method = "pearson", label.x = 0.25, label.y = 1.0,size=3)+ 
+gcor<-ggplot(t,aes(x=clusterlog,y=butterflylog))+geom_point()+stat_cor(method = "kendall", label.x = 0.25, label.y = 1.0,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("cluster insertions")+ylab("butterfly insertions")+scale_x_continuous(breaks=c(0,1,2),labels=c("0","9","99"))+scale_y_continuous(breaks=c(0,1,2),labels=c("0","9","99"))
 
 plot(gcor)

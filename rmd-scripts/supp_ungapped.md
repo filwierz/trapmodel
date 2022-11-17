@@ -102,7 +102,7 @@ ht<-unique(ht)
 ht$indsrel<-ht$inds/sum(ht$inds)
 
 
-real<-ggplot(ht, aes(x=cluster, y=indsrel)) + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(0,30)#+ geom_vline( xintercept =alq,col="red") + geom_vline( xintercept =auq,col="red")#+xlim(-1,160)+ylim(0,0.35)
+real<-ggplot(ht, aes(x=cluster, y=indsrel)) + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")#+xlim(0,30)#+ geom_vline( xintercept =alq,col="red") + geom_vline( xintercept =auq,col="red")
 
 
 t<-tq
@@ -160,7 +160,7 @@ cC$noncluster<-log10(cC$avrrest+1)
 
 
 
-gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "pearson", label.x = 1, label.y = 2,size=3)+ 
+gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "kendall", label.x = 1, label.y = 2,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))
 
 
@@ -168,13 +168,6 @@ gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "pears
 gGAP<-ggarrange(gC,real,
                 labels = c("A","B"),
                 ncol = 2, nrow = 1)
-```
-
-    ## Warning: Removed 33 rows containing missing values (position_stack).
-
-    ## Warning: Removed 2 rows containing missing values (geom_bar).
-
-``` r
 plot(gGAP)
 ```
 
