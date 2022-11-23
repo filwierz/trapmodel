@@ -22,23 +22,17 @@ library(dplyr)
 library(ggplot2)
 library(ggpubr)
 
-th=15
-#th=30
+th=5
 
-b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Canton-S_w500.txt")
-#b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V2/Canton-S.txt")
+b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Canton-S_w500.txt")
 names(b1)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/DGRP-732_w500.txt")
-#b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V2/DGRP-732.txt")
+b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/DGRP-732_w500.txt")
 names(b2)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Iso1_w500.txt")
-#b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V2/Iso1.txt")
+b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Iso1_w500.txt")
 names(b3)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Oregon-R_w500.txt")
-#b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V2/Oregon-R.txt")
+b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Oregon-R_w500.txt")
 names(b4)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Pi2_w500.txt")
-#b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V2/Pi2.txt")
+b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Pi2_w500.txt")
 names(b5)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 
 

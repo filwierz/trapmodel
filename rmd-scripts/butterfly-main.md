@@ -15,7 +15,10 @@ for i in *.sam; do n=${i%.sam}; cat $i|grep -v '^@'|awk '$3 !~ /_miRNA|_rRNA|_sn
 #mapping to genome
 for i in *fastq;do n=${i%.fastq};novoalign -d /Volumes/Temp3/filip/trap_model/whole-genome/assemblies/${n}.nvi -f $i -F STDFQ -o SAM -o FullNW -r RANDOM > map/${n}.sam;done
 #screening for butterflies
-nohup sh -c 'for i in *sam;do n=${i%.sam};python /Volumes/Temp3/filip/trap_model/trapmodel/helper-scripts/butterfly_finder-V2.py --sam $i --rm /Volumes/Temp3/filip/trap_model/whole-genome/repeatmasker/${n}.fasta.out --window 500 --minlen 100 --maxdiv 10.0 --min-mq 5 --id ${n} > other-parameter/TE/${n}_w500.txt;done' &
+#at TEs:
+nohup sh -c 'for i in *sam;do n=${i%.sam};python /Volumes/Temp3/filip/trap_model/trapmodel/helper-scripts/butterfly_finder-V2.py --sam $i --rm /Volumes/Temp3/filip/trap_model/whole-genome/repeatmasker/${n}.fasta.out --window 500 --minlen 100 --maxdiv 10.0 --min-mq 5 --id ${n} > output-V3/TE/${n}_w500.txt;done' &
+#at BUSCOs:
+nohup sh -c 'for i in *sam;do n=${i%.sam};python /Volumes/Temp3/filip/trap_model/trapmodel/helper-scripts/butterfly_finder-genes.py --sam $i --bed /Volumes/Temp3/filip/trap_model/clusterscore/busco_bed/${n}_busco.bed --window 500 --minlen 100 --min-mq 5 --id ${n} > output-V3/busco/${n}_w500.txt;done' &
 ```
 
 ``` r
@@ -37,23 +40,17 @@ library(dplyr)
 library(ggplot2)
 library(ggpubr)
 
-th=15
-#th=30
+th=5
 
-b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Canton-S_w500.txt")
-#b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V2/Canton-S.txt")
+b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Canton-S_w500.txt")
 names(b1)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/DGRP-732_w500.txt")
-#b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V2/DGRP-732.txt")
+b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/DGRP-732_w500.txt")
 names(b2)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Iso1_w500.txt")
-#b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V2/Iso1.txt")
+b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Iso1_w500.txt")
 names(b3)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Oregon-R_w500.txt")
-#b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V2/Oregon-R.txt")
+b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Oregon-R_w500.txt")
 names(b4)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Pi2_w500.txt")
-#b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V2/Pi2.txt")
+b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Pi2_w500.txt")
 names(b5)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 
 
@@ -465,18 +462,18 @@ ghis<-ggplot(t, aes(x=cluster, y=indsrel,fill=type))+ geom_bar(stat="identity",p
 
 
 # butterfly signatures busco genes:
-b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/busco/Canton-S_w500.txt")
+b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/busco/Canton-S_w500.txt")
 names(b1)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/busco/DGRP-732_w500.txt")
+b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/busco/DGRP-732_w500.txt")
 names(b2)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/busco/Iso1_w500.txt")
+b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/busco/Iso1_w500.txt")
 names(b3)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/busco/Oregon-R_w500.txt")
+b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/busco/Oregon-R_w500.txt")
 names(b4)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/busco/Pi2_w500.txt")
+b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/busco/Pi2_w500.txt")
 names(b5)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 
-th=15 #
+th=5 #
 
 ic=b1[FALSE,]
 
@@ -549,15 +546,15 @@ buscosum$type<-c("busco")
 #########################TEs
 
 #butterfly signatures:
-b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Canton-S_w500.txt")
+b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Canton-S_w500.txt")
 names(b1)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/DGRP-732_w500.txt")
+b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/DGRP-732_w500.txt")
 names(b2)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Iso1_w500.txt")
+b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Iso1_w500.txt")
 names(b3)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Oregon-R_w500.txt")
+b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Oregon-R_w500.txt")
 names(b4)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Pi2_w500.txt")
+b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Pi2_w500.txt")
 names(b5)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 
 #cluster annotations to exclude from butterfly signatures:
@@ -844,7 +841,7 @@ g<-ggarrange(gbt, ghis,
                 ncol = 1, nrow = 2)
 ```
 
-    ## Warning: Removed 139 rows containing missing values (geom_bar).
+    ## Warning: Removed 134 rows containing missing values (geom_bar).
 
 ``` r
 plot(g)

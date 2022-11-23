@@ -36,6 +36,7 @@ args=parser.parse_args()
 
 ws=args.window
 mmq=args.minmq
+pp=0
 
 topr=collections.defaultdict((lambda:collections.defaultdict(lambda:collections.defaultdict(lambda:collections.defaultdict(lambda:[0,0,0,0])))))
 toit=collections.defaultdict((lambda:collections.defaultdict(lambda:[0,0])))
@@ -57,8 +58,10 @@ for l in args.sam:
         continue
     if flag & 0x10: #rc
         toit[chromo][pos][1]+=1
+        pp+=1
     else:
         toit[chromo][pos][0]+=1
+        pp+=1
 
 
 for k in args.rm:
@@ -95,7 +98,7 @@ for t,tmp in topr.items():
     for c,tmp2 in tmp.items():
         for s,tmp3 in tmp2.items():
             for e,ch in tmp3.items():
-                print("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}".format(t,c,s,e,ch[0],ch[1],ch[2],ch[3],args.sampleid))
+                print("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}".format(t,c,s,e,1000000*ch[0]/pp,1000000*ch[1]/pp,1000000*ch[2]/pp,1000000*ch[3]/pp,args.sampleid))
        
 
 
