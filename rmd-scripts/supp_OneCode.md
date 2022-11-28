@@ -49,6 +49,45 @@ library(dplyr)
 library(ggplot2)
 library(ggpubr)
 
+#simulations:
+t<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/constant-u/run3-seed/combined/tally-constant_u")
+
+names(t)<-c("replicate","generation","type","abundance","number")
+t$abundance<-t$abundance/2 #for halpoid abundance
+
+t<-subset(t,generation==2000)
+t<-subset(t,type=="cluster")
+
+for (sid in unique(t$abundance)) { 
+  i <- t$abundance == sid
+  a = sum(t$number[i])
+  t$sum[i] = a
+} 
+
+ts<-unique(subset(t,select=c("abundance","sum")))
+ts$rel<-ts$sum/sum(ts$sum)
+
+lq=0
+uq=0
+tso<-ts[order(ts$abundance),]
+for (row in 1:nrow(tso)) { 
+  lq=lq+tso$rel[row]
+  
+  if(lq>0.01){
+    alq=(tso$abundance[row]+tso$abundance[row-1])/2
+    break
+  }
+}
+for (row in 1:nrow(tso)) { 
+  uq=uq+tso$rel[row]
+  
+  if(uq>0.99){
+    auq=(tso$abundance[row]+tso$abundance[row+1])/2
+    break
+  }
+}
+
+
 #######
 ###For population frequency Info based on Kofler et al. 2015 PLOS Genetics
 info1<-read.table("/Users/filipwierzbicki/Desktop/evolution_cluster/temp/TEfamInfo_correct")
@@ -122,7 +161,7 @@ ht<-unique(ht)
 ht$indsrel<-ht$inds/sum(ht$inds)
 
 
-real<-ggplot(ht, aes(x=cluster, y=indsrel)) + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")#+ geom_vline( xintercept =alq,col="red") + geom_vline( xintercept =auq,col="red")#+xlim(-1,160)+ylim(0,0.35)
+real<-ggplot(ht, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")#+ geom_vline( xintercept =alq,col="red") + geom_vline( xintercept =auq,col="red")#+xlim(-1,160)+ylim(0,0.35)
 
 
 t<-tq
