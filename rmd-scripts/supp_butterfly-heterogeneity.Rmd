@@ -18,18 +18,18 @@ library(dplyr)
 library(ggplot2)
 library(ggpubr)
 
-th=15
+th=5
 
 #butterfly signatures:
-b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Canton-S_w500.txt")
+b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Canton-S_w500.txt")
 names(b1)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/DGRP-732_w500.txt")
+b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/DGRP-732_w500.txt")
 names(b2)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Iso1_w500.txt")
+b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Iso1_w500.txt")
 names(b3)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Oregon-R_w500.txt")
+b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Oregon-R_w500.txt")
 names(b4)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/other-parameter/TE/Pi2_w500.txt")
+b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Pi2_w500.txt")
 names(b5)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 
 #cluster annotations to exclude from butterfly signatures:
@@ -226,8 +226,28 @@ infoP<-subset(info1,select=c("name","AF"))
 infoP$AF<-round(infoP$AF,digits = 1)
 names(infoP)<-c("TE","AF")
 
+#####add missing data as 0s:
+infoTE<-as.data.frame(info$TE)
+names(infoTE)<-c("TE")
+TE1m<-anti_join(infoTE,TE1,by="TE")
+TE1m$strain<-c("Canton-S")
+TE1m$sum<-c(0)
 
+TE2m<-anti_join(infoTE,TE2,by="TE")
+TE2m$strain<-c("DGRP-732")
+TE2m$sum<-c(0)
 
+TE3m<-anti_join(infoTE,TE3,by="TE")
+TE3m$strain<-c("Iso1")
+TE3m$sum<-c(0)
+
+TE4m<-anti_join(infoTE,TE4,by="TE")
+TE4m$strain<-c("Oregon-R")
+TE4m$sum<-c(0)
+
+TE5m<-anti_join(infoTE,TE5,by="TE")
+TE5m$strain<-c("Pi2")
+TE5m$sum<-c(0)
 #average across assemblies:
 t<-rbind(TE1,TE2,TE3,TE4,TE5)
 
@@ -250,10 +270,10 @@ for (sid in unique(t$id2)) {
   a = nrow(subset(t,id2==sid))
   t$sum[i] = a
 }
-TEsum<-subset(t,select=c("strain","TE","sum"))
+TEsum<-subset(t,select=c("TE","strain","sum"))
 TEsum<-unique(TEsum)
 
-bT<-TEsum
+bT<-rbind(TEsum,TE1m,TE2m,TE3m,TE4m,TE5m)
 
 
 
@@ -300,8 +320,9 @@ bT$id<-paste(bT$strain,bT$TE,sep = "_")
 abT$id<-paste(abT$strain,abT$TE,sep = "_")
 
 
-frac<-inner_join(bT,abT,by="id")
+frac<-left_join(bT,abT,by="id")
 frac$rel<-frac$sum.x/frac$sum.y
+frac[is.na(frac)] <- 0
 
 frac<-subset(frac,select=c("strain.x","TE.x","rel","sum.x"))
 names(frac)<-c("strain","TE","rel","sum")
@@ -311,23 +332,30 @@ names(TEname)<-c("TE","abbr","family")
 
 frac<-left_join(frac,TEname,by="TE")
 
+for (sid in unique(frac$TE)) { 
+  i <- frac$TE == sid
+  a = sum(frac$sum[i])
+  frac$sumsum[i] = a
+}
+
+frac<-subset(frac,sumsum!=0)
 
 abs<-ggplot(frac, aes(x=family, y=sum))+geom_boxplot() 
 abs<-abs+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank())+ylab("number of butterflies")
 
-ga<-ggplot(frac,aes(x=family,y=sum,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("number of butterflies")+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank())
+ga<-ggplot(frac,aes(x=family,y=sum,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("number of butterflies")+theme(axis.title.x=element_blank(),axis.text.x=element_blank(),legend.position="top",legend.title = element_blank())
 
 rel<-ggplot(frac, aes(x=family, y=rel))+geom_boxplot() 
 rel<-rel+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank())+ylab("fraction of butterflies")
 
-gr<-ggplot(frac,aes(x=family,y=rel,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("fraction of butterflies")+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank())
+gr<-ggplot(frac,aes(x=family,y=rel*100,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("fraction of butterflies (%)")+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank(),legend.position="None")
 
-g<-ggarrange(abs,ga, rel,gr,
-             labels = c("A", "B","C","D"),
-             ncol = 1, nrow = 4)
+g<-ggarrange(ga,gr,
+             labels = c("A", "B"),
+             ncol = 1, nrow = 2)
 plot(g)
 
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly-heterogeneity.pdf",width=12,height=10)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly-heterogeneity.png",width=12,height=10)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly-heterogeneity.pdf",width=12,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly-heterogeneity.png",width=12,height=6)
 
 ```
