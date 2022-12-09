@@ -19,7 +19,6 @@ library(dplyr)
 library(ggplot2)
 library(ggpubr)
 options(digits=15)
-th=5
 ws=100000
 
 ##the filter with this Info table is not used here since its rather a demonstration than the trap model test:
@@ -40,13 +39,13 @@ b2ch<-read.table("/Users/filipwierzbicki/Desktop/trap_model/data/core/chromosome
 b4ch<-read.table("/Users/filipwierzbicki/Desktop/trap_model/data/core/chromosome-names/Oregon-R.tsv")
 
 #butterfly signatures:
-b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Canton-S_w500.txt")
+b1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/signatures/output-V3/TE/filtered/Canton-S_w500.txt")
 names(b1)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 b1$pos<-b1$start+((b1$end-b1$start)/2)
 b1$chromo<-gsub("_RaGOO","",b1$chr)
 b1$signal<-b1$ls+b1$la+b1$rs+b1$ra
 
-b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/DGRP-732_w500.txt")
+b2<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/signatures/output-V3/TE/filtered/DGRP-732_w500.txt")
 b2<-left_join(b2,b2ch,by="V2")
 names(b2)<-c("TE","accession","start","end","ls","la","rs","ra","strain","chr")
 b2<-subset(b2,select=c("TE","chr","start","end","ls","la","rs","ra","strain"))
@@ -54,14 +53,14 @@ b2$pos<-b2$start+((b2$end-b2$start)/2)
 b2$chromo<-b2$chr
 b2$signal<-b2$ls+b2$la+b2$rs+b2$ra
 
-b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Iso1_w500.txt")
+b3<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/signatures/output-V3/TE/filtered/Iso1_w500.txt")
 names(b3)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 #chromosomes are good to go!
 b3$pos<-b3$start+((b3$end-b3$start)/2)
 b3$chromo<-b3$chr
 b3$signal<-b3$ls+b3$la+b3$rs+b3$ra
 
-b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Oregon-R_w500.txt")
+b4<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/signatures/output-V3/TE/filtered/Oregon-R_w500.txt")
 b4<-left_join(b4,b4ch,by="V2")
 names(b4)<-c("TE","accession","start","end","ls","la","rs","ra","strain","chr")
 b4<-subset(b4,select=c("TE","chr","start","end","ls","la","rs","ra","strain"))
@@ -69,13 +68,13 @@ b4$pos<-b4$start+((b4$end-b4$start)/2)
 b4$chromo<-b4$chr
 b4$signal<-b4$ls+b4$la+b4$rs+b4$ra
 
-b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Pi2_w500.txt")
+b5<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/signatures/output-V3/TE/filtered/Pi2_w500.txt")
 names(b5)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 b5$pos<-b5$start+((b5$end-b5$start)/2)
 b5$chromo<-gsub("_RaGOO","",b5$chr)
 b5$signal<-b5$ls+b5$la+b5$rs+b5$ra
 
-#cluster annotations to exclude from butterfly signatures:
+#cluster annotations:
 c1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/Canton-S_cluster.bed")
 names(c1)<-c("chr","start","end","cluster","ig","ir")
 c1$chromo<-gsub("_RaGOO","",c1$chr)
@@ -92,7 +91,6 @@ c3$chromo<-c3$chr
 c4<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/Oregon-R_cluster.bed")
 c4<-left_join(c4,b4ch, by = c("V1" = "V2"))
 names(c4)<-c("chr","start","end","cluster","ig","ir","chromo")
-
 
 c5<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/Pi2_cluster.bed")
 names(c5)<-c("chr","start","end","cluster","ig","ir")
@@ -114,50 +112,17 @@ c5$start<-c5$start+1
 c5$end<-c5$end+1
 
 
-b1$id<-paste(b1$TE,b1$chr,b1$start,b1$end,sep = "_")
-b2$id<-paste(b2$TE,b2$chr,b2$start,b2$end,sep = "_")
-b3$id<-paste(b3$TE,b3$chr,b3$start,b3$end,sep = "_")
-b4$id<-paste(b4$TE,b4$chr,b4$start,b4$end,sep = "_")
-b5$id<-paste(b5$TE,b5$chr,b5$start,b5$end,sep = "_")
-###
-#excluding signatures from clusters: 
-ic=b1[FALSE,]
+tb1<-subset(b1,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
+tb1$chr_f = factor(tb1$chromo, levels=c('X','2L','2R','3L','3R'))
 
-for(i in 1:nrow(b1)) {
-  row <- b1[i,]
-  
-  for(k in 1:nrow(c1)){
-    line <- c1[k,]
-    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
-      ic[nrow(ic) + 1,] <- row
-      break
-    }
-    
-  }
-}
-
-nc<-anti_join(b1,ic,by="id")
-
-ic=nc[FALSE,]
-
-for(i in 1:nrow(nc)) {
-  row <- nc[i,]
-  if (row$la>=th && row$rs>=th){
-    ic[nrow(ic) + 1,] <- row
-  }
-}
-
-tb<-subset(ic,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
-tb$chr_f = factor(tb$chromo, levels=c('X','2L','2R','3L','3R'))
-
-tb<-subset(tb,select=c("chr_f","pos"))
-tb$type<-c("stand-alone")
+tb1<-subset(tb1,select=c("chr_f","pos"))
+tb1$type<-c("stand-alone")
 c1$pos<-c1$start+((c1$end-c1$start)/2)
 c1x<-subset(c1,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
 c1x$chr_f = factor(c1x$chromo, levels=c('X','2L','2R','3L','3R'))
 c1x<-subset(c1x,select=c("chr_f","pos"))
 c1x$type<-c("cluster")
-tb1<-rbind(tb,c1x)
+tb1<-rbind(tb1,c1x)
 #
 ###
 tb1$pos<-as.integer(tb1$pos/ws)*ws
@@ -187,43 +152,17 @@ ct1$sum<-c(0)
 tb1<-rbind(tb1,ct1)
 ###
 
-ic=b2[FALSE,]
+tb2<-subset(b2,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
+tb2$chr_f = factor(tb2$chromo, levels=c('X','2L','2R','3L','3R'))
 
-for(i in 1:nrow(b2)) {
-  row <- b2[i,]
-  
-  for(k in 1:nrow(c2)){
-    line <- c2[k,]
-    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
-      ic[nrow(ic) + 1,] <- row
-      break
-    }
-    
-  }
-}
-
-nc<-anti_join(b2,ic,by="id")
-
-ic=nc[FALSE,]
-
-for(i in 1:nrow(nc)) {
-  row <- nc[i,]
-  if (row$la>=th && row$rs>=th){
-    ic[nrow(ic) + 1,] <- row
-  }
-}
-
-tb<-subset(ic,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
-tb$chr_f = factor(tb$chromo, levels=c('X','2L','2R','3L','3R'))
-
-tb<-subset(tb,select=c("chr_f","pos"))
-tb$type<-c("stand-alone")
+tb2<-subset(tb2,select=c("chr_f","pos"))
+tb2$type<-c("stand-alone")
 c2$pos<-c2$start+((c2$end-c2$start)/2)
 c1x<-subset(c2,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
 c1x$chr_f = factor(c1x$chromo, levels=c('X','2L','2R','3L','3R'))
 c1x<-subset(c1x,select=c("chr_f","pos"))
 c1x$type<-c("cluster")
-tb2<-rbind(tb,c1x)
+tb2<-rbind(tb2,c1x)
 #
 ###
 tb2$pos<-as.integer(tb2$pos/ws)*ws
@@ -253,43 +192,17 @@ ct2$sum<-c(0)
 tb2<-rbind(tb2,ct2)
 ###
 
-ic=b3[FALSE,]
+tb3<-subset(b3,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
+tb3$chr_f = factor(tb3$chromo, levels=c('X','2L','2R','3L','3R'))
 
-for(i in 1:nrow(b3)) {
-  row <- b3[i,]
-  
-  for(k in 1:nrow(c3)){
-    line <- c3[k,]
-    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
-      ic[nrow(ic) + 1,] <- row
-      break
-    }
-    
-  }
-}
-
-nc<-anti_join(b3,ic,by="id")
-
-ic=nc[FALSE,]
-
-for(i in 1:nrow(nc)) {
-  row <- nc[i,]
-  if (row$la>=th && row$rs>=th){
-    ic[nrow(ic) + 1,] <- row
-  }
-}
-
-tb<-subset(ic,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
-tb$chr_f = factor(tb$chromo, levels=c('X','2L','2R','3L','3R'))
-
-tb<-subset(tb,select=c("chr_f","pos"))
-tb$type<-c("stand-alone")
+tb3<-subset(tb3,select=c("chr_f","pos"))
+tb3$type<-c("stand-alone")
 c3$pos<-c3$start+((c3$end-c3$start)/2)
 c1x<-subset(c3,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
 c1x$chr_f = factor(c1x$chromo, levels=c('X','2L','2R','3L','3R'))
 c1x<-subset(c1x,select=c("chr_f","pos"))
 c1x$type<-c("cluster")
-tb3<-rbind(tb,c1x)
+tb3<-rbind(tb3,c1x)
 #
 ###
 tb3$pos<-as.integer(tb3$pos/ws)*ws
@@ -319,43 +232,17 @@ ct3$sum<-c(0)
 tb3<-rbind(tb3,ct3)
 ###
 
-ic=b4[FALSE,]
+tb4<-subset(b4,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
+tb4$chr_f = factor(tb4$chromo, levels=c('X','2L','2R','3L','3R'))
 
-for(i in 1:nrow(b4)) {
-  row <- b4[i,]
-  
-  for(k in 1:nrow(c4)){
-    line <- c4[k,]
-    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
-      ic[nrow(ic) + 1,] <- row
-      break
-    }
-    
-  }
-}
-
-nc<-anti_join(b4,ic,by="id")
-
-ic=nc[FALSE,]
-
-for(i in 1:nrow(nc)) {
-  row <- nc[i,]
-  if (row$la>=th && row$rs>=th){
-    ic[nrow(ic) + 1,] <- row
-  }
-}
-
-tb<-subset(ic,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
-tb$chr_f = factor(tb$chromo, levels=c('X','2L','2R','3L','3R'))
-
-tb<-subset(tb,select=c("chr_f","pos"))
-tb$type<-c("stand-alone")
+tb4<-subset(tb4,select=c("chr_f","pos"))
+tb4$type<-c("stand-alone")
 c4$pos<-c4$start+((c4$end-c4$start)/2)
 c1x<-subset(c4,chromo=="2L"|chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
 c1x$chr_f = factor(c1x$chromo, levels=c('X','2L','2R','3L','3R'))
 c1x<-subset(c1x,select=c("chr_f","pos"))
 c1x$type<-c("cluster")
-tb4<-rbind(tb,c1x)
+tb4<-rbind(tb4,c1x)
 #
 ###
 tb4$pos<-as.integer(tb4$pos/ws)*ws
@@ -384,47 +271,20 @@ ct4$type<-c("end-points")
 ct4$sum<-c(0)
 tb4<-rbind(tb4,ct4)
 ###
-
-ic=b5[FALSE,]
-
-for(i in 1:nrow(b5)) {
-  row <- b5[i,]
-  
-  for(k in 1:nrow(c5)){
-    line <- c5[k,]
-    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
-      ic[nrow(ic) + 1,] <- row
-      break
-    }
-    
-  }
-}
-
-nc<-anti_join(b5,ic,by="id")
-
-ic=nc[FALSE,]
-
-for(i in 1:nrow(nc)) {
-  row <- nc[i,]
-  if (row$la>=th && row$rs>=th){
-    ic[nrow(ic) + 1,] <- row
-  }
-}
-
 ##
 ct5<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/ref/ref_recover/helper_files/Pi2_contigs.txt")
 names(ct5)<-c("chromo","name","last")
 ####
 #reverse positions for 2L in in Pi2:
-tb2L<-subset(ic,chromo=="2L")
+tb2L<-subset(b5,chromo=="2L")
 tb2L$pos<-subset(ct5,chromo=="2L")$last-tb2L$pos+1
 #####
-tb<-subset(ic,chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
-tb<-rbind(tb,tb2L)#add 2L to the rest of the data
-tb$chr_f = factor(tb$chromo, levels=c('X','2L','2R','3L','3R'))
+tb5<-subset(b5,chromo=="2R"|chromo=="3L"|chromo=="3R"|chromo=="X")
+tb5<-rbind(tb5,tb2L)#add 2L to the rest of the data
+tb5$chr_f = factor(tb5$chromo, levels=c('X','2L','2R','3L','3R'))
 
-tb<-subset(tb,select=c("chr_f","pos"))
-tb$type<-c("stand-alone")
+tb5<-subset(tb5,select=c("chr_f","pos"))
+tb5$type<-c("stand-alone")
 c5$pos<-c5$start+((c5$end-c5$start)/2)
 #
 c52L<-subset(c5,chromo=="2L")
@@ -435,7 +295,7 @@ c1x<-rbind(c1x,c52L)#add 2L to the rest of the data
 c1x$chr_f = factor(c1x$chromo, levels=c('X','2L','2R','3L','3R'))
 c1x<-subset(c1x,select=c("chr_f","pos"))
 c1x$type<-c("cluster")
-tb5<-rbind(tb,c1x)
+tb5<-rbind(tb5,c1x)
 ###
 tb5$pos<-as.integer(tb5$pos/ws)*ws
 tb5$id<-paste(tb5$chr_f,tb5$pos,tb5$type,sep = "+")

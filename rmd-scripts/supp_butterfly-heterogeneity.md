@@ -26,198 +26,20 @@ library(dplyr)
 library(ggplot2)
 library(ggpubr)
 
-th=5
 
 #butterfly signatures:
-b1<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Canton-S_w500.txt")
-names(b1)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b2<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/DGRP-732_w500.txt")
-names(b2)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b3<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Iso1_w500.txt")
-names(b3)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b4<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Oregon-R_w500.txt")
-names(b4)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-b5<-read.table("/Volumes/Temp3/filip/trap_model/butterfly/filtered-reads/map/output-V3/TE/Pi2_w500.txt")
-names(b5)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
-
-#cluster annotations to exclude from butterfly signatures:
-c1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/Canton-S_cluster.bed")
-names(c1)<-c("chr","start","end","cluster","ig","ir")
-c2<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/DGRP-732_cluster.bed")
-names(c2)<-c("chr","start","end","cluster","ig","ir")
-c3<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/Iso1_cluster.bed")
-names(c3)<-c("chr","start","end","cluster","ig","ir")
-c4<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/Oregon-R_cluster.bed")
-names(c4)<-c("chr","start","end","cluster","ig","ir")
-c5<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/Pi2_cluster.bed")
-names(c5)<-c("chr","start","end","cluster","ig","ir")
-
-c1$start<-c1$start+1
-c1$end<-c1$end+1
-
-c2$start<-c2$start+1
-c2$end<-c2$end+1
-
-c3$start<-c3$start+1
-c3$end<-c3$end+1
-
-c4$start<-c4$start+1
-c4$end<-c4$end+1
-
-c5$start<-c5$start+1
-c5$end<-c5$end+1
+TE1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/signatures/output-V3/TE/filtered/Canton-S_w500.txt")
+names(TE1)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
+TE2<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/signatures/output-V3/TE/filtered/DGRP-732_w500.txt")
+names(TE2)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
+TE3<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/signatures/output-V3/TE/filtered/Iso1_w500.txt")
+names(TE3)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
+TE4<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/signatures/output-V3/TE/filtered/Oregon-R_w500.txt")
+names(TE4)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
+TE5<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/butterfly/signatures/output-V3/TE/filtered/Pi2_w500.txt")
+names(TE5)<-c("TE","chr","start","end","ls","la","rs","ra","strain")
 
 
-b1$id<-paste(b1$TE,b1$chr,b1$start,b1$end,sep = "_")
-b2$id<-paste(b2$TE,b2$chr,b2$start,b2$end,sep = "_")
-b3$id<-paste(b3$TE,b3$chr,b3$start,b3$end,sep = "_")
-b4$id<-paste(b4$TE,b4$chr,b4$start,b4$end,sep = "_")
-b5$id<-paste(b5$TE,b5$chr,b5$start,b5$end,sep = "_")
-###
-#excluding signatures from clusters: 
-ic=b1[FALSE,]
-
-for(i in 1:nrow(b1)) {
-  row <- b1[i,]
-  
-  for(k in 1:nrow(c1)){
-    line <- c1[k,]
-    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
-      ic[nrow(ic) + 1,] <- row
-      break
-    }
-    
-  }
-}
-
-nc<-anti_join(b1,ic,by="id")
-
-ic=nc[FALSE,]
-
-for(i in 1:nrow(nc)) {
-  row <- nc[i,]
-  if (row$la>=th && row$rs>=th){
-    ic[nrow(ic) + 1,] <- row
-  }
-}
-
-TE1<-ic
-#
-
-ic=b2[FALSE,]
-
-for(i in 1:nrow(b2)) {
-  row <- b2[i,]
-  
-  for(k in 1:nrow(c2)){
-    line <- c2[k,]
-    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
-      ic[nrow(ic) + 1,] <- row
-      break
-    }
-    
-  }
-}
-
-nc<-anti_join(b2,ic,by="id")
-
-ic=nc[FALSE,]
-
-for(i in 1:nrow(nc)) {
-  row <- nc[i,]
-  if (row$la>=th && row$rs>=th){
-    ic[nrow(ic) + 1,] <- row
-  }
-}
-
-TE2<-ic
-#
-
-ic=b3[FALSE,]
-
-for(i in 1:nrow(b3)) {
-  row <- b3[i,]
-  
-  for(k in 1:nrow(c3)){
-    line <- c3[k,]
-    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
-      ic[nrow(ic) + 1,] <- row
-      break
-    }
-    
-  }
-}
-
-nc<-anti_join(b3,ic,by="id")
-
-ic=nc[FALSE,]
-
-for(i in 1:nrow(nc)) {
-  row <- nc[i,]
-  if (row$la>=th && row$rs>=th){
-    ic[nrow(ic) + 1,] <- row
-  }
-}
-
-TE3<-ic
-#
-
-ic=b4[FALSE,]
-
-for(i in 1:nrow(b4)) {
-  row <- b4[i,]
-  
-  for(k in 1:nrow(c4)){
-    line <- c4[k,]
-    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
-      ic[nrow(ic) + 1,] <- row
-      break
-    }
-    
-  }
-}
-
-nc<-anti_join(b4,ic,by="id")
-
-ic=nc[FALSE,]
-
-for(i in 1:nrow(nc)) {
-  row <- nc[i,]
-  if (row$la>=th && row$rs>=th){
-    ic[nrow(ic) + 1,] <- row
-  }
-}
-
-TE4<-ic
-#
-
-ic=b5[FALSE,]
-
-for(i in 1:nrow(b5)) {
-  row <- b5[i,]
-  
-  for(k in 1:nrow(c5)){
-    line <- c5[k,]
-    if ((line$chr==row$chr && line$start<=row$start&&row$start<=line$end)||(line$chr==row$chr && line$start<=row$end&&row$end<=line$end)){
-      ic[nrow(ic) + 1,] <- row
-      break
-    }
-    
-  }
-}
-
-nc<-anti_join(b5,ic,by="id")
-
-ic=nc[FALSE,]
-
-for(i in 1:nrow(nc)) {
-  row <- nc[i,]
-  if (row$la>=th && row$rs>=th){
-    ic[nrow(ic) + 1,] <- row
-  }
-}
-
-TE5<-ic
 #summary that needs to be kept:
 #######
 ###For population frequency Info based on Kofler et al. 2015 PLOS Genetics
@@ -230,9 +52,7 @@ info1<-subset(info1,name!="gypsy10"&name!="gypsy"&name!="ZAM"&name!="gtwin"&name
 info<-subset(info1,select=c("TE","AF"))
 info$AF<-round(info$AF,digits = 1)
 
-infoP<-subset(info1,select=c("name","AF"))
-infoP$AF<-round(infoP$AF,digits = 1)
-names(infoP)<-c("TE","AF")
+
 
 #####add missing data as 0s:
 infoTE<-as.data.frame(info$TE)
@@ -359,14 +179,14 @@ for (sid in unique(frac$TE)) {
 frac<-subset(frac,sumsum!=0)
 
 abs<-ggplot(frac, aes(x=family, y=sum))+geom_boxplot() 
-abs<-abs+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank())+ylab("number of butterflies")
+abs<-abs+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank())+ylab("number of DSL")
 
-ga<-ggplot(frac,aes(x=family,y=sum,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("number of butterflies")+theme(axis.title.x=element_blank(),axis.text.x=element_blank(),legend.position="top",legend.title = element_blank())
+ga<-ggplot(frac,aes(x=family,y=sum,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("number of DSL")+theme(axis.title.x=element_blank(),axis.text.x=element_blank(),legend.position="top",legend.title = element_blank())
 
 rel<-ggplot(frac, aes(x=family, y=rel))+geom_boxplot() 
-rel<-rel+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank())+ylab("fraction of butterflies")
+rel<-rel+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank())+ylab("fraction of DSL")
 
-gr<-ggplot(frac,aes(x=family,y=rel*100,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("fraction of butterflies (%)")+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank(),legend.position="None")
+gr<-ggplot(frac,aes(x=family,y=rel*100,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("fraction of DSL (%)")+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank(),legend.position="None")
 
 g<-ggarrange(ga,gr,
              labels = c("A", "B"),
