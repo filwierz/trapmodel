@@ -82,9 +82,9 @@ cr<-rbind(cluster,reference)
 
 
 correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 50, label.y = 12.5,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("transposon traps")
+  geom_smooth(method='lm', formula= y~x)+xlab("non-trap insertions")+ylab("trap insertions")
 correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 50, label.y = 20.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
+  geom_smooth(method='lm', formula= y~x)+xlab("non-reference insertions")+ylab("reference insertions")
 
 ####trajectories:
 
@@ -151,9 +151,9 @@ cr<-rbind(cluster,reference)
 
 
 correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 50, label.y = 15,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("transposon traps")
+  geom_smooth(method='lm', formula= y~x)+xlab("non-trap insertions")+ylab("trap insertions")
 correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 50, label.y = 23.5,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
+  geom_smooth(method='lm', formula= y~x)+xlab("non-reference insertions")+ylab("reference insertions")
 
 ####trajectories:
 t<-tout
@@ -293,9 +293,9 @@ cr<-rbind(cluster,reference)
 
 
 correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 50, label.y = 14.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("transposon traps")
+  geom_smooth(method='lm', formula= y~x)+xlab("non-trap insertions")+ylab("trap insertions")
 correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 50, label.y = 18.7,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
+  geom_smooth(method='lm', formula= y~x)+xlab("non-reference insertions")+ylab("reference insertions")
 
 ####trajectories:
 
@@ -375,9 +375,9 @@ cr<-rbind(cluster,reference)
 
 
 correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 25, label.y = 11.5,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("transposon traps")
+  geom_smooth(method='lm', formula= y~x)+xlab("non-trap insertions")+ylab("trap insertions")
 correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 25, label.y = 11,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
+  geom_smooth(method='lm', formula= y~x)+xlab("non-reference insertions")+ylab("reference insertions")
 
 ####trajectories:
 

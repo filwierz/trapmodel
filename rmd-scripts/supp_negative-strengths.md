@@ -67,7 +67,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("cluster insertions")
+histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")
 
 t<-subset(tally,generation==gentx)
 t<-subset(t,type=="ref")
@@ -81,7 +81,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("reference insertions")
+historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")
 
 
 output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/x0.01/combined/output_x0.01.txt")
@@ -108,10 +108,10 @@ reference$type<-c("reference")
 cr<-rbind(cluster,reference)
 
 
-correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 12.5,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("piRNA clusters")
-correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 15.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
+correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 0.1, label.y = 12.5,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-trap insertions")+ylab("trap insertions")
+correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 0.1, label.y = 0.05,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-reference insertions")+ylab("reference insertions")
 
 ####trajectories:
 output<-subset(output,select=c("replicate","generation","tes","phase"))#for new filter
@@ -148,7 +148,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("cluster insertions")
+histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")
 
 t<-subset(tally,generation==gentx)
 t<-subset(t,type=="ref")
@@ -162,7 +162,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("reference insertions")
+historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")
 
 
 output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/x0.001/combined/output_x0.001.txt")
@@ -189,10 +189,10 @@ reference$type<-c("reference")
 cr<-rbind(cluster,reference)
 
 
-correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 12.5,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("piRNA clusters")
-correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 15.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
+correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 5, label.y = 12.5,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-trap insertions")+ylab("trap insertions")
+correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 5, label.y = 6,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-reference insertions")+ylab("reference insertions")
 
 ####trajectories:
 
@@ -228,7 +228,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("cluster insertions")
+histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")
 
 t<-subset(tally,generation==gentx)
 t<-subset(t,type=="ref")
@@ -242,7 +242,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("reference insertions")
+historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")
 
 
 output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/x0.0001/combined/output_x0.0001.txt")
@@ -269,10 +269,10 @@ reference$type<-c("reference")
 cr<-rbind(cluster,reference)
 
 
-correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 12.5,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("piRNA clusters")
-correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 15.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
+correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 50, label.y = 12.5,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-trap insertions")+ylab("trap insertions")
+correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 50, label.y = 15.0,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-reference insertions")+ylab("reference insertions")
 
 ####trajectories:
 

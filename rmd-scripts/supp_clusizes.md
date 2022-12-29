@@ -51,7 +51,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("cluster insertions")
+histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")
 
 t<-subset(tally,generation==gentx)
 t<-subset(t,type=="ref")
@@ -65,7 +65,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("reference insertions")
+historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")
 
 
 output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/pic0.35/output-pic0.35")
@@ -92,10 +92,10 @@ reference$type<-c("reference")
 cr<-rbind(cluster,reference)
 
 
-correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 12.5,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("piRNA clusters")
-correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 15.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
+correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 500, label.y = 11,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-trap insertions")+ylab("trap insertions")
+correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 500, label.y = 20.0,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-reference insertions")+ylab("reference insertions")
 
 ####trajectories:
 
@@ -112,7 +112,7 @@ g01<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
     ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
 ``` r
-g01<-annotate_figure(g01,top = text_grob("piRNA cluster/reference region size: 0.35%"))
+g01<-annotate_figure(g01,top = text_grob("transposon trap/reference region size: 0.35%"))
 
 ####pic3.5%
 
@@ -133,7 +133,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("cluster insertions")
+histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")
 
 t<-subset(tally,generation==gentx)
 t<-subset(t,type=="ref")
@@ -147,7 +147,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("reference insertions")
+historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")
 
 
 output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/constant-u/run3-seed/combined/output-constant_u")
@@ -174,10 +174,10 @@ reference$type<-c("reference")
 cr<-rbind(cluster,reference)
 
 
-correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 12.5,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("piRNA clusters")
-correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 15.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
+correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 50, label.y = 12.5,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-trap insertions")+ylab("trap insertions")
+correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 50, label.y = 20.0,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-reference insertions")+ylab("reference insertions")
 
 ####trajectories:
 
@@ -194,7 +194,7 @@ g001<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
     ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
 ``` r
-g001<-annotate_figure(g001,top = text_grob("piRNA cluster/reference region size: 3.5%"))
+g001<-annotate_figure(g001,top = text_grob("transposon trap/reference region size: 3.5%"))
 
 ####pic35.0%
 
@@ -215,7 +215,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("cluster insertions")
+histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")
 
 t<-subset(tally,generation==gentx)
 t<-subset(t,type=="ref")
@@ -229,7 +229,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("reference insertions")
+historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")
 
 
 output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/pic35.0/output-pic35.0")
@@ -256,10 +256,10 @@ reference$type<-c("reference")
 cr<-rbind(cluster,reference)
 
 
-correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 12.5,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("piRNA clusters")
-correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "pearson", label.x = 0.1, label.y = 15.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("rest of genome")+ylab("reference regions")
+correlationC<-ggplot(cluster, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 0.1, label.y = 13,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-trap insertions")+ylab("trap insertions")
+correlationR<-ggplot(reference, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", cor.coef.name="tau", label.x = 4, label.y = 21.0,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-reference insertions")+ylab("reference insertions")
 
 ####trajectories:
 
@@ -276,7 +276,7 @@ g0001<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
     ## Warning: Removed 7500 row(s) containing missing values (geom_path).
 
 ``` r
-g0001<-annotate_figure(g0001,top = text_grob("piRNA cluster/reference region size: 35%"))
+g0001<-annotate_figure(g0001,top = text_grob("transposon trap/reference region size: 35%"))
 
 #############
 #combine plots:
