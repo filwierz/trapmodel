@@ -51,8 +51,8 @@ t$global<-t$global/2 #for halpoid abundance
 t$local<-t$local/2 #for halpoid abundance
 
 
-gS<-ggplot(t, aes(x=global, y=local)) + geom_point()+stat_cor(method = "kendall", label.x = 50.1, label.y = 6.5,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+xlim(50,200)+ggtitle("Expected: Simulated invasions \n under the trap model")
+gS<-ggplot(t, aes(x=global, y=local)) + geom_point()+stat_cor(cor.coef.name="tau",method = "kendall", label.x = 50.1, label.y = 6.5,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+xlim(50,200)+ggtitle("expected - simulations")+theme(plot.title = element_markdown(size=11))
 
 
 
@@ -145,8 +145,8 @@ cC$cluster<-log10(cC$avrcl+1)
 cC$noncluster<-log10(cC$avrrest+1)
 
 
-gPop<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "kendall", label.x = 0.1, label.y = 1.42,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+ggtitle("Observed: Short-read based TE calls \n in known clusters")
+gPop<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(cor.coef.name="tau",method = "kendall", label.x = 0, label.y = 1.42,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+scale_y_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+ggtitle("observed - reference assembly and reference annotations")+theme(plot.title = element_markdown(size=11))
 
 
 
@@ -221,8 +221,8 @@ cC$cluster<-log10(cC$avrcl+1)
 cC$noncluster<-log10(cC$avrrest+1)
 
 
-gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "kendall", label.x = 0.5, label.y = 2.0,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+ggtitle("Observed: known clusters \n in long-read assemblies ")
+gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(cor.coef.name="tau",method = "kendall", label.x = 0.5, label.y = 2.35,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+scale_y_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+ggtitle("observed -*de novo* assemblies and reference annotations")+theme(plot.title = element_markdown(size=11))
 
 
 
@@ -290,8 +290,8 @@ cC$cluster<-log10(cC$avrcl+1)
 cC$noncluster<-log10(cC$avrrest+1)
 
 
-gP<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "kendall", label.x = 1, label.y = 2,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+ggtitle("Observed: *de novo*-called clusters<br>in long-read assemblies ")+theme(plot.title = element_markdown())
+gP<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(cor.coef.name="tau",method = "kendall", label.x = 0.85, label.y = 2,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+scale_y_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+ggtitle("observed -*de novo* assemblies and annotations")+theme(plot.title = element_markdown(size=11))
 
 
 
@@ -317,6 +317,6 @@ plot(gcor)
 ![](main-cor_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 ``` r
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/correlation_main.pdf",width=7,height=6)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/correlation_main.png",width=7,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/correlation_main.pdf",width=9,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/correlation_main.png",width=9,height=6)
 ```

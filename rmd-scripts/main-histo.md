@@ -110,7 +110,7 @@ for (row in 1:nrow(tso)) {
   }
 }
 
-simu<-ggplot(ts, aes(x=abundance, y=rel)) + geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat = "identity")+ylab("frequency of individuals")+xlab("cluster insertions")+ggtitle("Expected: Simulated invasions \n under the trap model")#+xlim(-1,160)+ylim(0,0.35)
+simu<-ggplot(ts, aes(x=abundance, y=rel)) + geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat = "identity")+ylab("frequency")+xlab("cluster insertions")+ggtitle("expected - simulations")+theme(plot.title = element_markdown(size=11))
 
 
 #######
@@ -192,7 +192,7 @@ ht<-unique(ht)
 ht$indsrel<-ht$inds/sum(ht$inds)
 
 
-real<-ggplot(ht, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(-1,31)+ggtitle("Observed: known clusters \n in long-read assemblies ")#+xlim(-1,160)+ylim(0,0.35)
+real<-ggplot(ht, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency")+xlab("cluster insertions")+xlim(-1,31)+ggtitle("observed -*de novo* assemblies and reference annotations")+theme(plot.title = element_markdown(size=11))
 
 
 ##ref (not used currently)
@@ -245,7 +245,7 @@ cR<-unique(cR)
 cR$indsrel<-cR$inds/sum(cR$inds)
 
 
-ref<-ggplot(cR, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of reference insertions")#+xlim(-1,160)+ylim(0,0.35)
+ref<-ggplot(cR, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency")+xlab("number of reference insertions")#+xlim(-1,160)+ylim(0,0.35)
 
 
 ###whole genome (not used currently)
@@ -289,7 +289,7 @@ tqu<-unique(tqu)
 tqu$indsrel<-tqu$inds/sum(tqu$inds)
 
 
-whole<-ggplot(tqu, aes(x=insertions, y=indsrel)) + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of genomic insertions")#+xlim(-1,160)+ylim(0,0.35)
+whole<-ggplot(tqu, aes(x=insertions, y=indsrel)) + geom_bar(stat="identity")+ylab("frequency")+xlab("number of genomic insertions")#+xlim(-1,160)+ylim(0,0.35)
 
 
 ###popTE2:
@@ -369,7 +369,7 @@ pt<-unique(pt)
 pt$indsrel<-pt$inds/sum(pt$inds)
 
 
-popTE2<-ggplot(pt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+ggtitle("Observed: Short-read based TE calls \n in known clusters")#+xlim(-1,160)+ylim(0,0.35)
+popTE2<-ggplot(pt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency")+xlab("cluster insertions")+ggtitle("observed - reference assembly and reference annotations")+theme(plot.title = element_markdown(size=11))
 
 
 
@@ -440,7 +440,7 @@ prt<-unique(prt)
 prt$indsrel<-prt$inds/sum(prt$inds)
 
 
-proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")+xlim(-1,31)+ggtitle("Observed: *de novo*-called clusters<br>in long-read assemblies ")+theme(plot.title = element_markdown())
+proT<-ggplot(prt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency")+xlab("cluster insertions")+xlim(-1,31)+ggtitle("observed -*de novo* assemblies and annotations")+theme(plot.title = element_markdown(size=11))
 
 
 
@@ -465,6 +465,6 @@ plot(g)
 ![](main-histo_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 ``` r
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.pdf",width=7.5,height=6)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.png",width=7.5,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.pdf",width=9,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/histogram_main.png",width=9,height=6)
 ```
