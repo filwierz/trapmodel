@@ -127,12 +127,12 @@ tclu$id<-paste(tclu$cluster,tclu$strain,sep = "_")
 tbut<-left_join(dfc,tbut,by="id")
 tclu<-left_join(dfc,tclu,by="id")
 
-tbut$type<-c("with-DSL")
-tclu$type<-c("cluster-only")
+tbut$type<-c("clusters + DSL")
+tclu$type<-c("clusters only")
 
-t<-rbind(tbut,tclu)
+t<-rbind(tclu,tbut)
 t[is.na(t)] <- 0
-ghis<-ggplot(t, aes(x=cluster.x, y=indsrel,fill=type))+ geom_bar(stat="identity",position = "dodge")+facet_wrap(~strain.x,ncol = 5)+ylab("frequency of individuals")+xlab("number of cluster insertions")+
+ghis<-ggplot(t, aes(x=cluster.x, y=indsrel,fill=type))+ geom_bar(stat="identity",position = "dodge")+facet_wrap(~strain.x,ncol = 5)+ylab("frequency")+xlab("cluster insertions")+
   theme_bw()+theme(legend.position="right")+scale_fill_discrete(name=NULL)#+ coord_cartesian(xlim = c(0, 30))#, expand = FALSE#+xlim(-1,31)
 
 

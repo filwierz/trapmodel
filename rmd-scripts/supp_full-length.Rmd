@@ -136,7 +136,7 @@ ht<-unique(ht)
 ht$indsrel<-ht$inds/sum(ht$inds)
 
 
-real<-ggplot(ht, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency of individuals")+xlab("number of cluster insertions")#+ geom_vline( xintercept =alq,col="red") + geom_vline( xintercept =auq,col="red")#+xlim(-1,160)+ylim(0,0.35)
+real<-ggplot(ht, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="red")+ geom_vline( xintercept =auq,col="red") + geom_bar(stat="identity")+ylab("frequency")+xlab("cluster insertions")
 
 
 t<-tq
@@ -194,8 +194,8 @@ cC$noncluster<-log10(cC$avrrest+1)
 
 
 
-gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(method = "kendall", label.x = 0.1, label.y = 1,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))
+gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(cor.coef.name="tau", method = "kendall", label.x = 0, label.y = 1.35,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+scale_y_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))
 
 
 gFL<-ggarrange(gC,real,

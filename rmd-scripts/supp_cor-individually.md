@@ -104,8 +104,8 @@ ids<-data.frame(id,strain)
 cC<-merge(cC,ids,by="id")
 cC$id<-cC$strain
 
-gPop<-ggplot(cC,aes(x=lognoncluster,y=logcluster))+geom_point()+stat_cor(method = "kendall", label.x = 0, label.y = 1.6,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+facet_wrap(~id,nrow=1)
+gPop<-ggplot(cC,aes(x=lognoncluster,y=logcluster))+geom_point()+stat_cor(cor.coef.name="tau", method = "kendall", label.x = 0, label.y = 1.6,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+scale_y_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+facet_wrap(~id,nrow=1)
 
 
 
@@ -163,8 +163,8 @@ cC$logcluster<-log10(cC$cluster+1)
 cC$lognoncluster<-log10(cC$noncluster+1)
 
 
-gC<-ggplot(cC,aes(x=lognoncluster,y=logcluster))+geom_point()+stat_cor(method = "kendall", label.x = 0, label.y = 2.5,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+facet_wrap(~id,nrow=1)
+gC<-ggplot(cC,aes(x=lognoncluster,y=logcluster))+geom_point()+stat_cor(cor.coef.name="tau", method = "kendall", label.x = 0, label.y = 2.5,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+scale_y_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+facet_wrap(~id,nrow=1)
 
 
 
@@ -220,8 +220,8 @@ cC$lognoncluster<-log10(cC$noncluster+1)
 
 cC$id<-gsub("\\_.*","",cC$id)
 
-gP<-ggplot(cC,aes(x=lognoncluster,y=logcluster))+geom_point()+stat_cor(method = "kendall", label.x = 0, label.y = 2.3,size=3)+ 
-  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+scale_y_continuous(breaks=c(0,1,2,3),labels=c("0","9","99","999"))+facet_wrap(~id,nrow=1)
+gP<-ggplot(cC,aes(x=lognoncluster,y=logcluster))+geom_point()+stat_cor(cor.coef.name="tau", method = "kendall", label.x = 0, label.y = 2.3,size=3)+ 
+  geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+scale_y_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+facet_wrap(~id,nrow=1)
 
 
 
