@@ -178,7 +178,7 @@ t<-rbind(tbut,tclu)
 
 t<-subset(t,cluster<=30) ##for exact zoom-in
 
-ghis<-ggplot(t, aes(x=cluster, y=indsrel,fill=type))+ geom_bar(stat="identity",position = "dodge")+ylab("frequency of individuals")+xlab("number of cluster insertions")+theme_bw()+theme(legend.position="top")+scale_fill_discrete(name=NULL)
+ghis<-ggplot(t, aes(x=cluster, y=indsrel,fill=type))+ geom_bar(stat="identity",position = "dodge")+ylab("frequency")+xlab("insertions")+theme_bw()+theme(legend.position="top")+scale_fill_discrete(name=NULL)
 
 
 ####signatures at BUSCO VS TE:
@@ -295,7 +295,7 @@ frac$rel<-frac$sum.x/frac$sum.y
 frac<-subset(frac,select=c("strain.x","type.x","rel"))
 names(frac)<-c("strain","type","rel")
 
-gbt<-ggplot(frac,aes(x=strain,y=rel,alpha=type))+geom_bar(stat="identity",position="dodge",color="black") +ylab("fraction of butterflies")+xlab("strain")+theme_bw()+theme(legend.position="top")+scale_alpha_discrete(name=NULL)
+gbt<-ggplot(frac,aes(x=strain,y=rel,alpha=type))+geom_bar(stat="identity",position="dodge",color="black") +ylab("DSL fraction")+xlab("strain")+theme_bw()+theme(legend.position="top")+scale_alpha_discrete(name=NULL)
 ```
 
     ## Warning: Using alpha for a discrete variable is not advised.
