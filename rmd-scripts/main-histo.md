@@ -128,6 +128,16 @@ infoP<-subset(info1,select=c("name","AF"))
 infoP$AF<-round(infoP$AF,digits = 1)
 names(infoP)<-c("TE","AF")
 
+#new supplementary table for overview of used TEs:
+towrite<-info1
+towrite$AFr<-round(towrite$AF,digits = 1)
+towrite<-subset(towrite,AFr<=0.2)
+towrite<-subset(towrite,select=c("name","TE","order","AF"))
+towrite$AF<-round(towrite$AF*100,digits = 1)
+names(towrite)<-c("TE-family","seqID","order","population-frequency")
+write.table(towrite,file="/Users/filipwierzbicki/Desktop/trap_model/data/other/suptab_usedTEs.txt",quote = FALSE, row.names = FALSE)
+
+
 ##cusco+TAS
 t1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/Canton-S_gapped_cusco_tas_summary.forR")
 t2<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/cusco_tas/gapped_combined-distinct/DGRP-732_gapped_cusco_tas_summary.forR")
