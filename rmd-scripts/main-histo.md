@@ -48,7 +48,7 @@ for i in *_cluster.bed;do n=${i%_cluster.bed};mkdir ${n};python /Users/filipwier
 ```
 
 ``` bash
-cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed
+cd /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/new-cluster_bed
 for i in *_cluster.bed;do n=${i%_cluster.bed};mkdir ${n};python /Users/filipwierzbicki/Desktop/trap_model/github/trapmodel/helper-scripts/assembly_TE-abundance_3types.py --clu $i --rm /Users/filipwierzbicki/Desktop/trap_model/analysis/abu/whole-genome/repeatmasker/${n}.fasta.out --output ${n}/ --sample ${n}_p0.05 --approach gapped_protrac --minlen 100 --maxdiv 10.0 ;done
 ```
 
@@ -386,11 +386,11 @@ popTE2<-ggplot(pt, aes(x=cluster, y=indsrel))+ geom_vline( xintercept =alq,col="
 
 ###proTRAC_p0.05 only
 
-t1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/Canton-S_p0.05_gapped_protrac_summary.forR")
-t2<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/DGRP-732_p0.05_gapped_protrac_summary.forR")
-t3<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/Iso1_p0.05_gapped_protrac_summary.forR")
-t4<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/Oregon-R_p0.05_gapped_protrac_summary.forR")
-t5<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/Pi2_p0.05_gapped_protrac_summary.forR")
+t1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/new-cluster_bed/Canton-S_p0.05_gapped_protrac_summary.forR")
+t2<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/new-cluster_bed/DGRP-732_p0.05_gapped_protrac_summary.forR")
+t3<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/new-cluster_bed/Iso1_p0.05_gapped_protrac_summary.forR")
+t4<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/new-cluster_bed/Oregon-R_p0.05_gapped_protrac_summary.forR")
+t5<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/new-cluster_bed/Pi2_p0.05_gapped_protrac_summary.forR")
 
 t<-rbind(t1,t2,t3,t4,t5)
 
@@ -464,7 +464,7 @@ g<-ggarrange(simu, popTE2, real, proT,
 
     ## Warning: Removed 1 rows containing missing values (geom_bar).
 
-    ## Warning: Removed 30 rows containing missing values (position_stack).
+    ## Warning: Removed 13 rows containing missing values (position_stack).
 
     ## Warning: Removed 1 rows containing missing values (geom_bar).
 

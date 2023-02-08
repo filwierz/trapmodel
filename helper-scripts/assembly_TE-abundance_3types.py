@@ -58,6 +58,7 @@ toitref=collections.defaultdict((lambda:collections.defaultdict(lambda:collectio
 reftopr=collections.defaultdict((lambda:collections.defaultdict(lambda:[str])))
 refabupr=collections.defaultdict((lambda:[0]))
 
+TEids=set()
 
 for k in args.rm:
     k=k.rstrip("\n").lstrip(" ")
@@ -90,7 +91,10 @@ for l in args.bed:
         if chro==c:
             for st,tmp2 in tmp.items():
                 for en,ch in tmp2.items():
+                    if ch[1] in TEids:
+                        continue
                     if (start <= int(st) <= end) or (start <= int(en) <= end):
+                        TEids.add(ch[1])
                         topr[cl][ch[1]][0]=ch[0]#first key: cl -for separate cluster outputs; "cluster" -for single
                         del rest[c][st][en]
                         del toitref[c][st][en]

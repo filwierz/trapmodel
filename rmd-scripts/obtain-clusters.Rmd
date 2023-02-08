@@ -105,7 +105,7 @@ for i in p0.*/proTRAC_*;do n=${i%.map*};n=${n#p0.*/proTRAC_};st=${i%/proTRAC*};c
 
 cd minimal_cluster_bed
 
-for i in *.bed;do n=${i%.bed};g=${n%_*};python /Users/filipwierzbicki/Desktop/trap_model/scripts/merge_proTRAC_clusters.py --bed $i --polyn ../../merge_annotations/polyn/${g}.polyn > ../cluster_bed/${n}_cluster.bed;done
+for i in *.bed;do n=${i%.bed};g=${n%_*};python /Users/filipwierzbicki/Desktop/trap_model/github/trapmodel/helper-scripts/merge_proTRAC_clusters.py --bed $i --polyn ../../merge_annotations/polyn/${g}.polyn > ../new-cluster_bed/${n}_cluster.bed;done
 
 
 ```

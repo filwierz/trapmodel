@@ -228,11 +228,11 @@ gC<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(cor.coef.name="
 
 ###proTRAC_p0.05 only 
 
-t1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/Canton-S_p0.05_gapped_protrac_summary.forR")
-t2<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/DGRP-732_p0.05_gapped_protrac_summary.forR")
-t3<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/Iso1_p0.05_gapped_protrac_summary.forR")
-t4<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/Oregon-R_p0.05_gapped_protrac_summary.forR")
-t5<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/protrac_gapped_cluster_bed/Pi2_p0.05_gapped_protrac_summary.forR")
+t1<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/new-cluster_bed/Canton-S_p0.05_gapped_protrac_summary.forR")
+t2<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/new-cluster_bed/DGRP-732_p0.05_gapped_protrac_summary.forR")
+t3<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/new-cluster_bed/Iso1_p0.05_gapped_protrac_summary.forR")
+t4<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/new-cluster_bed/Oregon-R_p0.05_gapped_protrac_summary.forR")
+t5<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/protrac/new-cluster_bed/Pi2_p0.05_gapped_protrac_summary.forR")
 
 t<-rbind(t1,t2,t3,t4,t5)
 
@@ -290,7 +290,7 @@ cC$cluster<-log10(cC$avrcl+1)
 cC$noncluster<-log10(cC$avrrest+1)
 
 
-gP<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(cor.coef.name="tau",method = "kendall", label.x = 0.85, label.y = 2,size=3)+ 
+gP<-ggplot(cC,aes(x=noncluster,y=cluster))+geom_point()+stat_cor(cor.coef.name="tau",method = "kendall", label.x = 1, label.y = 2,size=3)+ 
   geom_smooth(method='lm', formula= y~x)+xlab("non-cluster insertions")+ylab("cluster insertions")+scale_x_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+scale_y_continuous(breaks=c(0,1.041393,2.004321,3.000434),labels=c("0","10","100","1000"))+ggtitle("observed -*de novo* assemblies and annotations")+theme(plot.title = element_markdown(size=11))
 
 

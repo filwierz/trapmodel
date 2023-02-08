@@ -21,7 +21,7 @@ parser.add_argument('--bed', type=argparse.FileType('r'), default=None,dest="bed
 parser.add_argument('--polyn', type=argparse.FileType('r'), default=None,dest="polyn", required=True, help="a polyN file from cusco")
 
 args=parser.parse_args()
-newcl=collections.defaultdict((lambda:collections.defaultdict(lambda:[int,str])))
+newcl=collections.defaultdict((lambda:collections.defaultdict(lambda:[int,str,int])))
 
 chromosomes=[]
 
@@ -33,26 +33,30 @@ for l in args.bed:
     start=int(m[1])
     end=int(m[2])
     cl=str(m[3])
+    olen=int(end-start)
     
     if chro not in chromosomes:
         newcl[chro][start][0]=end
         newcl[chro][start][1]=cl
-        
+        newcl[chro][start][2]=olen
+
         chromosomes.append(chro)
         
     else:
         for c,tmp in newcl.items():
             if c==chro:
                 last=max(tmp, key=tmp.get)
-                l1=tmp[last][0]-last
+                l1=int(tmp[last][2])
                 gap=start-tmp[last][0]
-                l2=end-start
-                if (l1+l2)>gap:
+                
+                if (l1+olen)>gap:
                     newcl[c][last][0]=end
+                    newcl[c][last][2]=int(l1+olen)
                     break
                 else:
                     newcl[chro][start][0]=end
                     newcl[chro][start][1]=cl
+                    newcl[chro][start][2]=olen
                     break
 
 gapcl=[]
