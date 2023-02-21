@@ -155,7 +155,7 @@ for c,tmp in toprrest.items():
     
     
 for c,tmp in reftopr.items():
-    outname=outputdir+c+".fasta.out"
+    outname=outputdir+"ref"+c+".fasta.out"
     output_file = open(outname, 'w')
     for i,ch in tmp.items():
         output_file.write(re.sub('\s+','\t',ch[0])+"\n")
