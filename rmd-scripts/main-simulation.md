@@ -47,7 +47,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")
+histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")+xlim(0,30)
 
 t<-subset(tally,generation==gentx)
 t<-subset(t,type=="ref")
@@ -61,7 +61,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")
+historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")+xlim(0,30)
 
 
 output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/constant-u/run3-seed/combined/output-constant_u")
@@ -107,6 +107,12 @@ gconsu<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
 ```
 
     ## Warning: Removed 7500 row(s) containing missing values (geom_path).
+
+    ## Warning: Removed 1 rows containing missing values (geom_bar).
+
+    ## Warning: Removed 2 rows containing missing values (position_stack).
+
+    ## Warning: Removed 2 rows containing missing values (geom_bar).
 
 ``` r
 ############################
@@ -207,7 +213,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")
+histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")+xlim(0,30)
 
 
 
@@ -226,7 +232,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")
+historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")+xlim(0,30)
 
 
 
@@ -236,6 +242,10 @@ gvart<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
 ```
 
     ## Warning: Removed 7500 row(s) containing missing values (geom_path).
+
+    ## Warning: Removed 1 rows containing missing values (geom_bar).
+    
+    ## Warning: Removed 1 rows containing missing values (geom_bar).
 
 ``` r
 ###############
@@ -261,7 +271,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")
+histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")+xlim(0,30)
 
 t<-subset(tally,generation==gentx)
 t<-subset(t,type=="ref")
@@ -275,7 +285,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")
+historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")+xlim(0,30)
 
 
 
@@ -325,6 +335,10 @@ gvaru<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
 ```
 
     ## Warning: Removed 7500 row(s) containing missing values (geom_path).
+    
+    ## Warning: Removed 1 rows containing missing values (geom_bar).
+    
+    ## Warning: Removed 1 rows containing missing values (geom_bar).
 
 ``` r
 ##############
@@ -349,7 +363,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")
+histo<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("trap insertions")+xlim(0,30)
 
 t<-subset(tally,generation==gentx)
 t<-subset(t,type=="ref")
@@ -363,7 +377,7 @@ for (sid in unique(t$abundance)) {
 ts<-unique(subset(t,select=c("abundance","sum")))
 ts$rel<-ts$sum/sum(ts$sum)
 
-historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")
+historef<-ggplot(ts, aes(x=abundance, y=rel)) + geom_bar(stat = "identity")+ylab("frequency")+xlab("reference insertions")+xlim(0,30)
 
 
 output<-read.table("/Users/filipwierzbicki/Desktop/trap_model/analysis/simulations/storm2/site04xMULT/output_site04xMULT.txt")
@@ -409,6 +423,10 @@ gneg<-ggarrange(trajectories,histo,historef, correlationC, correlationR,
 ```
 
     ## Warning: Removed 7500 row(s) containing missing values (geom_path).
+    
+    ## Warning: Removed 1 rows containing missing values (geom_bar).
+    
+    ## Warning: Removed 1 rows containing missing values (geom_bar).
 
 ``` r
 #############
