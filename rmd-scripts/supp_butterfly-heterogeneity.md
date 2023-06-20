@@ -181,12 +181,12 @@ frac<-subset(frac,sumsum!=0)
 abs<-ggplot(frac, aes(x=family, y=sum))+geom_boxplot() 
 abs<-abs+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank())+ylab("number of DSL")
 
-ga<-ggplot(frac,aes(x=family,y=sum,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("number of DSL")+theme(axis.title.x=element_blank(),axis.text.x=element_blank(),legend.position="top",legend.title = element_blank())
+ga<-ggplot(frac,aes(x=family,y=sum,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("number of DSL")+theme(axis.title.x=element_blank(),axis.text.x=element_blank(),legend.position = c(0.5, 0.9),legend.direction = "horizontal",legend.title = element_blank(),legend.text = element_text(size=12),axis.title.y=element_text(size=12))+ scale_fill_manual(values = c("red", "blue","yellow", "green","orange"))
 
 rel<-ggplot(frac, aes(x=family, y=rel))+geom_boxplot() 
 rel<-rel+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank())+ylab("fraction of DSL")
 
-gr<-ggplot(frac,aes(x=family,y=rel*100,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("fraction of DSL (%)")+theme(axis.text.x = element_text(angle = 45,hjust=1),axis.title.x=element_blank(),legend.position="None")
+gr<-ggplot(frac,aes(x=family,y=rel*100,fill=strain))+geom_bar(stat="identity",position="dodge",color="black")+ylab("fraction of DSL (%)")+theme(axis.text.x = element_text(angle = 45,hjust=1,size=12),axis.title.x=element_blank(),legend.position="None",axis.title.y=element_text(size=12))+ scale_fill_manual(values = c("red", "blue","yellow", "green","orange"))
 
 g<-ggarrange(ga,gr,
              labels = c("A", "B"),
@@ -197,6 +197,6 @@ plot(g)
 ![](supp_butterfly-heterogeneity_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 ``` r
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly-heterogeneity.pdf",width=12,height=6)
-ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly-heterogeneity.png",width=12,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly-heterogeneity.pdf",width=18,height=6)
+ggsave("/Users/filipwierzbicki/Desktop/trap_model/analysis/abu/figures/butterfly-heterogeneity.png",width=18,height=6)
 ```
